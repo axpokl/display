@@ -1,0 +1,367 @@
+// Const 常量
+
+const Black=$000000;
+      Navy=$800000;
+      DarkBlue=$8B0000;
+      MediumBlue=$CD0000;
+      Blue=$FF0000;
+      DarkGreen=$006400;
+      Green=$008000;
+      Teal=$808000;
+      DarkCyan=$8B8B00;
+      DeepSkyBlue=$FFBF00;
+      DarkTurquoise=$D1CE00;
+      MediumSpringGreen=$9AFA00;
+      Lime=$00FF00;
+      SpringGreen=$7FFF00;
+      Cyan=$FFFF00;
+      Aqua=$FFFF00;
+      MidnightBlue=$701919;
+      DodgerBlue=$FF901E;
+      LightSeaGreen=$AAB220;
+      ForestGreen=$228B22;
+      SeaGreen=$578B2E;
+      DarkSlateGray=$4F4F2F;
+      LimeGreen=$32CD32;
+      MediumSeaGreen=$71B33C;
+      Turquoise=$D0E040;
+      RoyalBlue=$E16941;
+      SteelBlue=$B48246;
+      DarkSlateBlue=$8B3D48;
+      MediumTurquoise=$CCD148;
+      Indigo=$82004B;
+      DarkOliveGreen=$2F6B55;
+      CadetBlue=$A09E5F;
+      CornflowerBlue=$ED9564;
+      MediumAquamarine=$AACD66;
+      DimGray=$696969;
+      SlateBlue=$CD5A6A;
+      OliveDrab=$238E6B;
+      SlateGray=$908070;
+      LightSlateGray=$998877;
+      MediumSlateBlue=$EE687B;
+      LawnGreen=$00FC7C;
+      Chartreuse=$00FF7F;
+      Aquamarine=$D4FF7F;
+      Maroon=$000080;
+      Purple=$800080;
+      Olive=$008080;
+      Gray=$808080;
+      SkyBlue=$EBCE87;
+      LightSkyBlue=$FACE87;
+      BlueViolet=$E22B8A;
+      DarkRed=$00008B;
+      DarkMagenta=$8B008B;
+      SaddleBrown=$13458B;
+      DarkSeaGreen=$8FBC8F;
+      LightGreen=$90EE90;
+      MediumPurple=$DB7093;
+      DarkViolet=$D30094;
+      PaleGreen=$98FB98;
+      DarkOrchid=$CC3299;
+      Amethyst=$CC6699;
+      YellowGreen=$32CD9A;
+      Sienna=$2D52A0;
+      Brown=$2A2AA5;
+      DarkGray=$A9A9A9;
+      LightBlue=$E6D8AD;
+      GreenYellow=$2FFFAD;
+      PaleTurquoise=$EEEEAF;
+      LightSteelBlue=$DEC4B0;
+      PowderBlue=$E6E0B0;
+      FireBrick=$2222B2;
+      DarkGoldenrod=$0B86B8;
+      MediumOrchid=$D355BA;
+      RosyBrown=$8F8FBC;
+      DarkKhaki=$6BB7BD;
+      Silver=$C0C0C0;
+      MediumVioletRed=$8515C7;
+      IndianRed=$5C5CCD;
+      Peru=$3F85CD;
+      Chocolate=$1E69D2;
+      LightGrey=$D3D3D3;
+      Thistle=$D8BFD8;
+      Orchid=$D670DA;
+      Goldenrod=$20A5DA;
+      PaleVioletRed=$9370DB;
+      Crimson=$3C14DC;
+      Gainsboro=$DCDCDC;
+      Plum=$DDA0DD;
+      BurlyWood=$87B8DE;
+      LightCyan=$FFFFE0;
+      Lavender=$FAE6E6;
+      DarkSalmon=$7A96E9;
+      Violet=$EE82EE;
+      PaleGoldenrod=$AAE8EE;
+      LightCoral=$8080F0;
+      Khaki=$8CE6F0;
+      AliceBlue=$FFF8F0;
+      Honeydew=$F0FFF0;
+      Azure=$FFFFF0;
+      SandyBrown=$60A4F4;
+      Wheat=$B3DEF5;
+      Beige=$DCF5F5;
+      WhiteSmoke=$F5F5F5;
+      MintCream=$FAFFF5;
+      GhostWhite=$FFF8F8;
+      Salmon=$7280FA;
+      AntiqueWhite=$D7EBFA;
+      Linen=$E6F0FA;
+      LightGoldenrodYellow=$D2FAFA;
+      OldLace=$E6F5FD;
+      Red=$0000FF;
+      Fuchsia=$FF00FF;
+      Magenta=$FF00FF;
+      DeepPink=$9314FF;
+      OrangeRed=$0045FF;
+      Tomato=$4763FF;
+      HotPink=$B469FF;
+      Coral=$507FFF;
+      DarkOrange=$008CFF;
+      LightSalmon=$7AA0FF;
+      Orange=$00A5FF;
+      LightPink=$C1B6FF;
+      Pink=$CBC0FF;
+      Gold=$00D7FF;
+      PeachPuff=$B9DAFF;
+      NavajoWhite=$ADDEFF;
+      Moccasin=$B5E4FF;
+      Bisque=$C4E4FF;
+      MistyRose=$E1E4FF;
+      BlanchedAlmond=$CDEBFF;
+      PapayaWhip=$D5EFFF;
+      LavenderBlush=$F5F0FF;
+      Seashell=$EEF5FF;
+      Cornsilk=$DCF8FF;
+      LemonChiffon=$CDFAFF;
+      FloralWhite=$F0FAFF;
+      Snow=$FAFAFF;
+      Yellow=$00FFFF;
+      LightYellow=$E0FFFF;
+      Ivory=$F0FFFF;
+      White=$FFFFFF;
+      TransParent=$1;
+
+const M_LEFT=0;
+      M_RIGHT=1;
+      M_MIDDLE=2;
+
+const K_UK=0;
+      K_LMOUSE=1;
+      K_RMOUSE=2;
+      K_CANCEL=3;
+      K_MMOUSE=4;
+      K_X1MOUSE=5;
+      K_X2MOUSE=6;
+      K_BACK=8;
+      K_TAB=9;
+      K_CLEAR=12;
+      K_ENTER=13;
+      K_SHIFT=16;
+      K_CTRL=17;
+      K_ALT=18;
+      K_PAUSE=19;
+      K_CAPS=20;
+      K_ESC=27;
+      K_SPACE=32;
+      K_PGUP=33;
+      K_PGDN=34;
+      K_END=35;
+      K_HOME=36;
+      K_LEFT=37;
+      K_UP=38;
+      K_RIGHT=39;
+      K_DOWN=40;
+      K_SELECT=41;
+      K_PRINT=42;
+      K_EXECUTE=43;
+      K_PRTSC=44;
+      K_INS=45;
+      K_DEL=46;
+      K_HELP=47;
+      K_0=48;
+      K_1=49;
+      K_2=50;
+      K_3=51;
+      K_4=52;
+      K_5=53;
+      K_6=54;
+      K_7=55;
+      K_8=56;
+      K_9=57;
+      K_A=65;
+      K_B=66;
+      K_C=67;
+      K_D=68;
+      K_E=69;
+      K_F=70;
+      K_G=71;
+      K_H=72;
+      K_I=73;
+      K_J=74;
+      K_K=75;
+      K_L=76;
+      K_M=77;
+      K_N=78;
+      K_O=79;
+      K_P=80;
+      K_Q=81;
+      K_R=82;
+      K_S=83;
+      K_T=84;
+      K_U=85;
+      K_V=86;
+      K_W=87;
+      K_X=88;
+      K_Y=89;
+      K_Z=90;
+      K_LWIN=91;
+      K_RWIN=92;
+      K_APPS=93;
+      K_SLEEP=95;
+      K_N0=96;
+      K_N1=97;
+      K_N2=98;
+      K_N3=99;
+      K_N4=100;
+      K_N5=101;
+      K_N6=102;
+      K_N7=103;
+      K_N8=104;
+      K_N9=105;
+      K_MUL=106;
+      K_ADD=107;
+      K_SEP=108;
+      K_SUB=109;
+      K_DEC=110;
+      K_DIV=111;
+      K_F1=112;
+      K_F2=113;
+      K_F3=114;
+      K_F4=115;
+      K_F5=116;
+      K_F6=117;
+      K_F7=118;
+      K_F8=119;
+      K_F9=120;
+      K_F10=121;
+      K_F11=122;
+      K_F12=123;
+      K_F13=124;
+      K_F14=125;
+      K_F15=126;
+      K_F16=127;
+      K_F17=128;
+      K_F18=129;
+      K_F19=130;
+      K_F20=131;
+      K_F21=132;
+      K_F22=133;
+      K_F23=134;
+      K_F24=135;
+      K_NUM=144;
+      K_SCR=145;
+      K_LSHIFT=160;
+      K_LCTRL=162;
+      K_LALT=164;
+      K_RSHIFT=161;
+      K_RCTRL=163;
+      K_RALT=165;
+
+const PI=3.1415926535897932384626433832795028841971694;
+
+const MAXCHAR=$100;                   //最大字符串长度
+const BUFFSIZE=$1000;                 //缓冲区大小
+const DELAYTIMEKEY=20;                //默认按键时长
+      DELAYTIMEDEFAULT=1;             //默认等待时长
+      DELAYTIMEMIN=1;                 //默认最短等待时长
+const FONTWIDTHDEFAULT=10;            //默认字体宽度
+      FONTHEIGHTDEFAULT=20;       //默认字体高度
+const MINHZ=100;                  //最小频率
+      MAXHZ=15000;                //最大频率
+const _mdn:array[0..2] of longword=(MOUSEEVENTF_LEFTDOWN,MOUSEEVENTF_RIGHTDOWN,MOUSEEVENTF_MIDDLEDOWN);
+const _mup:array[0..2] of longword=(MOUSEEVENTF_LEFTUP,MOUSEEVENTF_RIGHTUP,MOUSEEVENTF_MIDDLEUP);
+const _bdn:array[0..2] of longword=(WM_LBUTTONDOWN,WM_MBUTTONDOWN,WM_RBUTTONDOWN);
+const _bup:array[0..2] of longword=(WM_LBUTTONUP,WM_MBUTTONUP,WM_RBUTTONUP);
+const _bufmax=$100000;                //文件缓冲区大小
+const _thmax=$100;                    //最大线程数量
+const _mswinmax=$10000;               //窗口消息数目
+const _msusrmax=$10000;               //用户消息数目
+const _mscntmax=$10000;               //消息时间数目
+const GDIImageFormatBMP:TGUID='{557CF400-1A04-11D3-9A73-0000F81EF32E}';
+      GDIImageFormatJPG:TGUID='{557CF401-1A04-11D3-9A73-0000F81EF32E}';
+      GDIImageFormatGIF:TGUID='{557CF402-1A04-11D3-9A73-0000F81EF32E}';
+      GDIImageFormatEMF:TGUID='{557CF403-1A04-11D3-9A73-0000F81EF32E}';
+      GDIImageFormatWMF:TGUID='{557CF404-1A04-11D3-9A73-0000F81EF32E}';
+      GDIImageFormatTIF:TGUID='{557CF405-1A04-11D3-9A73-0000F81EF32E}';
+      GDIImageFormatPNG:TGUID='{557CF406-1A04-11D3-9A73-0000F81EF32E}';
+      GDIImageFormatICO:TGUID='{557CF407-1A04-11D3-9A73-0000F81EF32E}';
+
+// Internal Variable 内部变量
+
+var _w,_h,_x,_y:longint;              //窗口宽高坐标
+    _cbg,_cfg:longword;               //窗口背前景颜色
+    _style:longword;                  //窗口样式
+
+var _hw:longword;                     //窗口句柄
+    _dc:longword;                     //绘图句柄
+
+var _wc:wndClass;                     //窗口注册结构
+    _wca:ATOM;                        //窗口注册句柄
+    _ms:msg;                          //消息结构
+    _mst:msg;                         //消息结构缓存
+    _main:bitmap;                     //缓冲位图结构
+    _pmain:pbitmap;                   //缓冲位图指针
+    _mscr:bitmap;                     //屏幕位图结构
+    _pmscr:pbitmap;                   //屏幕位图指针
+
+var _tbegin:real;                     //窗口建立时间
+    _winb:boolean;                    //窗口状态
+    _draw:procedure;                  //绘图函数
+
+var _pe:longword;                 //画笔
+    _br:longword;                 //画刷
+
+var _fx,_fy:longword;             //文字输出位置
+    _fw,_fh,_fwg:longword;        //字体长宽粗细
+    _flt,_fud,                    //字体斜体下划线
+    _fsk,_fcs:longword;           //字体删除线字符集
+    _ffn:ansistring;              //字体名称
+    _fns:longword;                //字体结构
+    _strz:size;                   //字符串大小
+    _tm:textmetric;               //文本格式
+
+var _fnm:longword{=256};            //拖拽文件名长度
+    _fn:pchar;                    //拖拽文件名
+
+var _cid:longword;                //全局音频标识符
+    _cam:longword{=256};            //音频字符串长度
+    _ca:pchar;                    //音频字符串
+
+var _fhdl:longword;               //文件句柄
+    _fpos:longword;               //文件指针位置
+    _flen:longword;               //文件长度
+
+var _buflen:longword{=$10000};      //缓冲区长度
+    _buf:array[1.._bufmax]of byte;//缓存区
+    _bufpos:longword;             //缓冲区位置指针
+    _bufrem:longword;             //缓冲区剩余量
+
+var _th:array[0.._thmax-1]of longword;//线程句柄
+var _thi:longword;                    //线程句柄号
+
+var _mswin:array[1.._mswinmax]of msg; //窗口消息
+    _mswini:longword{=0};
+    _mswinj:longword{=0};
+var _msusr:array[1.._msusrmax]of msg; //用户消息
+    _msusri:longword{=1};
+    _msi:longword{=1};
+var _mscnt:array[0.._mscntmax-1]of real;//消息时间
+    _mscnti:longword{=0};
+    _mscntj:longword{=0};
+
+var _GdiStart:TGdiStartup;
+    _GdiToken:LongWord;
+    _GdiGraph:longword;
+    _GdiImage:longword;
+    _GdiWideChar:array[0..MAXCHAR-1]of WideChar;
