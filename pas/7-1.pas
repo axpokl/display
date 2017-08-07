@@ -46,7 +46,7 @@ begin
 while GetTimeR()>frametime+1/frame do frametime:=frametime+1/frame;//增加帧数（包括跳帧）
 if GetAudioLen(audio)=0 then pos:=0//如果音频长度为0（没有音频）则设音频窗口位置为0
 else pos:=round(real(w)*GetAudioPos(audio)/GetAudioLen(audio));//否则设定音频窗口位置
-Clear();Bar(0,0,pos,100,Yellow);//绘制播放状态
+Clear();Bar(pbitmap(0),0,0,pos,100,Yellow);//绘制状态
 DrawTextlnXY(i2s(GetAudioPos(audio))+' / '+i2s(GetAudioLen(audio)),0,0,Yellow,Blue);//输出状态
 FreshWin();//刷新窗口
 end;

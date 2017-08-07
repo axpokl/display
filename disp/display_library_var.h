@@ -1,5 +1,6 @@
 
-const long black = 0x000000;
+const long transparent = 0x000001;
+const long black = 0x010101;
 const long navy = 0x800000;
 const long darkblue = 0x8b0000;
 const long mediumblue = 0xcd0000;
@@ -139,7 +140,6 @@ const long yellow = 0x00ffff;
 const long lightyellow = 0xe0ffff;
 const long ivory = 0xf0ffff;
 const long white = 0xffffff;
-const long transparent = 0x1;
 
 const byte m_left = 0;
 const byte m_right = 1;

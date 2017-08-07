@@ -1,4 +1,4 @@
-Display单元库
+﻿Display单元库
 =============
 * 本单元库使用Windows GDI+ API进行绘图。
 * 本单元库有Pascal语言和C语言两个版本。
@@ -26,3 +26,4 @@ Display单元库
 -------------
 * http://axpokl.com/display.zip
 * http://axpokl.ys168.com/
+* http://github.com/axpokl/display

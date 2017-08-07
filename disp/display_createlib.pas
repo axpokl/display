@@ -1,9 +1,11 @@
 program display_createlib;
 var fin,fout,foutc:text;
-var sfun:ansistring;
-var sp1,sp2:ansistring;
-var sc1,sc2:ansistring;
-var ifun:longword;
+var sfun:ansistring='';
+var sp1:ansistring='';
+var sp2:ansistring='';
+var sc1:ansistring='';
+var sc2:ansistring='';
+var ifun:longword=0;
 
 function i2s(i:longint):ansistring;
 begin str(i,i2s);end;

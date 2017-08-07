@@ -46,7 +46,7 @@ if(gettimer()>frametime+1/frame)//如果当前时间已超过一帧时间
 while(gettimer()>frametime+1/frame)frametime=frametime+1/frame;//增加帧数（包括跳帧）
 if(getaudiolen(audio)==0)pos=0;//如果音频长度为0（没有音频）则设音频窗口位置为0
 else pos=round(double(w)*getaudiopos(audio)/getaudiolen(audio));//否则设定音频窗口位置
-clear();bar(0,0,pos,100,yellow);//绘制播放状态
+clear();bar(pbitmap(0),0,0,pos,100,yellow);//绘制状态
 drawtextlnxy(i2s(getaudiopos(audio))+" / "+i2s(getaudiolen(audio)),0,0,yellow,blue);//输出状态
 freshwin();//刷新窗口
 }
