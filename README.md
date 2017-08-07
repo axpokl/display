@@ -26,4 +26,4 @@
 -------------
 * http://axpokl.com/display.zip
 * http://axpokl.ys168.com/
-* http://github.com/axpokl/display
+* https://github.com/axpokl/display
