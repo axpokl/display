@@ -20,7 +20,7 @@
     版权信息请参考COPYING.FPC。
  **********************************************************************
     说明概要
-    更新时间：2017-07-16 13:22:45
+    更新时间：2017-08-07 03:04:28
     下载地址：http://axpokl.com/display.zip
     支持各种字符串，字符数组，整型变量的转换。
     支持ansistring作为无限长度整型变量进行算术，逻辑，按位运算。
@@ -630,7 +630,7 @@ var _buflen:longword=$10000;          //缓冲区长度
 var _th:array[0.._thmax-1]of longword;//线程句柄
 var _thi:longword;                    //线程句柄号
 
-var _mswin:array[1.._mswinmax]of msg; //窗口消息
+var _mswin:array[0.._mswinmax-1]of msg; //窗口消息
     _mswini:longword=0;
     _mswinj:longword=0;
 var _msusr:array[1.._msusrmax]of msg; //用户消息
@@ -1022,20 +1022,23 @@ function SendString(s:ansistring):longword;var c:array[0..MAXCHAR-1]of char;
 begin mciSendString(pchar(s),@c,MAXCHAR,0);SendString:=s2i(pc2as(@c));end;
 
 procedure WinCreateMain();
+var pmscr,pmain:pbitmap;
 begin
-ReleaseBMP();
+pmscr:=_pmscr;
+pmain:=_pmain;
 _dc:=GetDC(_hw);
 _mscr.Handle:=_hw;
 _mscr.DC:=_dc;
 _mscr.Width:=_w;
 _mscr.Height:=_h;
-_mscr.Color:=TRANSPARENT;
 _pmscr:=@_mscr;
 _pmain:=CreateBMP(_pmscr);
 _pmain^.Color:=Transparent;
 _main:=_pmain^;
 SetFont();
 if _draw<>nil then _draw;
+ReleaseBMP(pmscr);
+ReleaseBMP(pmain);
 end;
 
 function WndProc(hW:HWnd;uM:Uint;wP:WParam;lP:LParam):LResult;stdcall;
@@ -1859,9 +1862,9 @@ procedure ReleaseBMP(b:pbitmap);
 begin
 if b<>nil then
   begin
-  ReleaseDC(b^.Handle,b^.DC);
-  Deleteobject(b^.DC);
-  DeleteObject(b^.Handle);
+  if b^.dc<>_dc then ReleaseDC(b^.Handle,b^.DC);
+  if b^.dc<>_dc then Deleteobject(b^.DC);
+  if b^.Handle<>_hw then DeleteObject(b^.Handle);
   if b<>_pmscr then Freemem(b);
   end;
 end;
@@ -2037,6 +2040,7 @@ if IsNextMsg then
   begin
   _mswinj:=(_mswinj+1)mod _mswinmax;
   _ms:=_mswin[_mswinj];
+  while(_ms.message=0) do _ms:=_mswin[_mswinj];
   end;
 end
 else IsNextMsg:=true;
