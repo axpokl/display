@@ -1226,9 +1226,18 @@ WinRegister:=RegisterClass(_wc);
 end;
 
 procedure WinCreate();
+var rect:TRECT;
 begin
-_w:=_w+GetBorderWidth()*2;
-_h:=_h+GetBorderHeight()*2+GetBorderTitle();
+with rect do
+begin
+left:=GetPosX;
+top:=GetPosY;
+right:=left+_w;
+bottom:=top+_h;
+AdjustWindowRect(rect,_style,false);
+_w:=right-left;
+_h:=bottom-top;
+end;
 _hw:=CreateWindow(LPTSTR(DWORD(_wca)),nil,
 _style,_x,_y,_w,_h,0,0,MainInstance,nil);
 end;
@@ -1628,8 +1637,9 @@ procedure SetTitle(s:ansistring);
 begin SetWindowText(_hw,as2pc(s));end;
 function GetTitle():ansistring;var c:array[0..MAXCHAR-1]of char;
 begin GetWindowText(_hw,@c,MAXCHAR);GetTitle:=pc2as(@c);end;
-procedure SetSize(w,h:longword);
-begin MoveWindow(_hw,GetPosX,GetPosY,w+GetBorderWidth*2,h+GetBorderHeight*2+GetBorderTitle,true);end;
+procedure SetSize(w,h:longword);var rect:TRECT;
+begin with rect do begin left:=GetPosX;top:=GetPosY;right:=left+w;bottom:=top+h;
+AdjustWindowRect(rect,_style,false);MoveWindow(_hw,GetPosX,GetPosY,right-left,bottom-top,true);end;end;
 function GetWidth():longword;
 begin GetWidth:=_w;end;
 function GetHeight():longword;

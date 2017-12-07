@@ -1,23 +1,14 @@
 (**********************************************************************
     This file is part of ax_pokl run time library
-    Copyright (c) 2014 by ax_pokl
-
     This unit is similar as unit Graph in Free Pascal run time library
-    This unit use Windows API directly as a part of operation
-
-    See the file COPYING.FPC, included in this distribution,
-    for details about the copyright.
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
+    This unit use Windows API GDI+ to create window and draw pictures
+    Display Unit Copyright (C) 2014 by ax_pokl
+    See the GNU General Public License for details about the copyright
     这个文件是ax_pokl运行时库的一部分
-    版权所有（c）2014年ax_pokl
-
-    本Display单元库类似于Free Pascal中的单元库Graph
-    本单元库直接使用Windows API作为操作的一部分
-
-    版权信息请参考COPYING.FPC。
+    本单元库类似于Free Pascal运行时库中的Graph单元库
+    本单元库使用Windows API GDI+来创建窗口以及绘制图片
+    Display单元库版权所有（c）2014年ax_pokl
+    有关版权的详细信息请参考GNU通用公共许可协议
  **********************************************************************
     说明概要
     更新时间：2017-12-07 07:33:19
@@ -1226,9 +1217,18 @@ WinRegister:=RegisterClass(_wc);
 end;
 
 procedure WinCreate();
+var rect:TRECT;
 begin
-_w:=_w+GetBorderWidth()*2;
-_h:=_h+GetBorderHeight()*2+GetBorderTitle();
+with rect do
+begin
+left:=GetPosX;
+top:=GetPosY;
+right:=left+_w;
+bottom:=top+_h;
+AdjustWindowRect(rect,_style,false);
+_w:=right-left;
+_h:=bottom-top;
+end;
 _hw:=CreateWindow(LPTSTR(DWORD(_wca)),nil,
 _style,_x,_y,_w,_h,0,0,MainInstance,nil);
 end;
@@ -1628,8 +1628,9 @@ procedure SetTitle(s:ansistring);
 begin SetWindowText(_hw,as2pc(s));end;
 function GetTitle():ansistring;var c:array[0..MAXCHAR-1]of char;
 begin GetWindowText(_hw,@c,MAXCHAR);GetTitle:=pc2as(@c);end;
-procedure SetSize(w,h:longword);
-begin MoveWindow(_hw,GetPosX,GetPosY,w+GetBorderWidth*2,h+GetBorderHeight*2+GetBorderTitle,true);end;
+procedure SetSize(w,h:longword);var rect:TRECT;
+begin with rect do begin left:=GetPosX;top:=GetPosY;right:=left+w;bottom:=top+h;
+AdjustWindowRect(rect,_style,false);MoveWindow(_hw,GetPosX,GetPosY,right-left,bottom-top,true);end;end;
 function GetWidth():longword;
 begin GetWidth:=_w;end;
 function GetHeight():longword;
