@@ -19,5 +19,5 @@ drawtextln(i2s(long(round(frame))));//输出瞬时刷新率
 freshwin();//刷新窗口
 }
 delay();//延迟1毫秒
-}while(!(!(iswin())||iskey(27)));//直到窗口关闭或按ESC
+}while(!( !(iswin())||iskey(27)));//直到窗口关闭或按ESC
 return 0;}

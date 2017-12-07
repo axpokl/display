@@ -20,7 +20,7 @@
     版权信息请参考COPYING.FPC。
  **********************************************************************
     说明概要
-    更新时间：2017-07-16 13:22:45
+    更新时间：2017-12-07 07:33:19
     下载地址：http://axpokl.com/display.zip
     支持各种字符串，字符数组，整型变量的转换。
     支持ansistring作为无限长度整型变量进行算术，逻辑，按位运算。
@@ -39,10 +39,13 @@
     位图的默认背景色为透明色，请在读取位图后自行设置位图的背景色。
  **********************************************************************
     内联函数
-    arcsin              求反正弦
-    arccos              求反余弦
+    sgn                 求符号值
+    abs                 求二范数
     max                 求最大值
     min                 求最小值
+    arcsin              求反正弦
+    arccos              求反余弦
+    arctan2             求辐角
     字符串转换函数
     i2s                 整型转十进制字符串
     s2pc                十进制字符串串转字符数组指针
@@ -87,9 +90,12 @@
     asror               字节进制字符串按位循环右移
     控制函数
     NewThread           新线程
+    PauseThread         暂停线程
+    ResumeThread        继续线程
+    StopThread          停止线程
     MsgBox              弹出窗口
-    Sound               扬声器发音
     Delay               等待时间
+    Sound               扬声器发音
     FreshFPS            刷新刷新率
     GetFPSL             获取瞬时刷新率
     GetFPSR             获取平均刷新率
@@ -100,27 +106,52 @@
     FreshWin            刷新窗口
     CloseWin            关闭窗口
     IsWin               判断窗口状态
+    GetTime             获取窗口建立时间
     SetTitle            设置窗口标题
     GetTitle            获取窗口标题
-    GetTime             获取窗口建立时间
+    SetSize             设置窗口大小
     GetWidth            获取窗口宽度
     GetHeight           获取窗口高度
-    GetSize             获取窗口大小
+    GetScrWidth         获取屏幕宽度
+    GetScrHeight        获取屏幕高度
+    SetPos              设置窗口位置
     GetPosX             获取窗口横坐标
     GetPosY             获取窗口纵坐标
     GetBorderTitle      获取窗口边标题框高度
     GetBorderWidth      获取窗口边框宽度
     GetBorderHeight     获取窗口边框高度
-    GetBorderSize       获取窗口边框大小
+    GetWin              获取窗口绘图位图
+    GetScr              获取窗口实时位图
     GetHwnd             获取窗口窗口句柄
     GetDraw             获取窗口绘图句柄
+    颜色函数
     GetBGColor          获取窗口背景颜色
     SetBGColor          设置窗口背景颜色
     GetFGColor          获取窗口前景颜色
     SetFGColor          设置窗口前景颜色
-    GetScrWidth         获取屏幕宽度
-    GetScrHeight        获取屏幕高度
-    GetScrSize          获取屏幕大小
+    颜色函数
+    SetPenWidth         设置画笔宽度
+    SetPenColor         设置画笔颜色
+    SetBrushColor       设置画刷颜色
+    GetAlpha            获取RGBA透明分量
+    GetBlue             获取RGBA蓝色分量
+    GetGreen            获取RGBA绿色分量
+    GetRed              获取RGBA红色分量
+    GetRGBA             拼接RGBA颜色
+    GetRGB              拼接RGB颜色
+    Byte2Long           字节型拼接长整型
+    Long2Byte           长整型拆分字节型
+    Double2Long         双浮点拼接长整型
+    Long2Double         长整型拆分双浮点
+    RGB2HSL             红绿蓝转色饱亮
+    RGB2HSV             红绿蓝转色饱明
+    RGB2HSI             红绿蓝转色饱强
+    RGB2HSN             红绿蓝转色饱长
+    HSL2RGB             色饱亮转红绿蓝
+    HSV2RGB             色饱明转红绿蓝
+    HSI2RGB             色饱强转红绿蓝
+    HSN2RGB             色饱长转红绿蓝
+    MixColor            混合RGB颜色
     字体文本函数
     SetFont             将字体选入位图
     SetFontWidth        设置字体宽度
@@ -142,17 +173,33 @@
     绘图函数
     GetPixel            获取点
     SetPixel            设置点
+    GetBBPixel          获取缓存点
+    SetBBPixel          设置缓存点
     Line                画线
-    Bar                 画矩形
+    Bar                 画方
+    Clear               清屏
+    Triangle            画三角
+    Arc                 画弧
+    Pie                 画饼
+    Chord               画半圆
     Ellipse             画椭圆
     Circle              画圆
-    Clear               清屏
     位图函数
     CreateBMP           创建位图
+    ReleaseBMP          释放位图
     LoadBMP             读取位图
     SaveBMP             保存位图
     DrawBMP             绘制位图
-    ReleaseBMP          释放位图
+    MixBMP              混合位图
+    BlurBMPBox          模糊位图均值
+    BlurBMPGau          模糊位图高斯
+    CreateBB            创建位图缓存
+    ReleaseBB           释放位图缓存
+    GetBB               获取位图缓存
+    SetBB               设置位图缓存
+    MixBB               混合位图缓存
+    BlurBBBox           模糊位图缓存均值
+    BlurBBGau           模糊位图缓存高斯
     鼠标键盘函数
     PreesKey            按下键盘按键
     DownKey             按住键盘按键
@@ -233,11 +280,11 @@
     cfg   前景颜色   longword       画笔颜色
     pos   位置       longword       x*$10000+y
     r     半径       longword
-    a     角度|弧度  word|real      real=word/360*2*pi
+    a     角度|弧度  word|double      double=word/360*2*pi
     s     字符串     ansistring     pchar=@s[1]
     k     键盘按键   byte           详见key.inc
     m     鼠标按键   byte           详见key.inc
-    t     时间       longword|real  real=longword/1000
+    t     时间       longword|double  double=longword/1000
     hz    频率       longword
     b     位图       pbitmap        详见type
     v     音量       longword       0到1000
@@ -265,6 +312,13 @@ type bitmap=record                //位图类型
        Color:longword;            //位图背景颜色
        end;
 type pbitmap=^bitmap;             //位图指针
+type bitbuf=record                //位图缓存类型
+       bmi:BITMAPINFO;            //位图缓存位图信息
+       len:longword;              //位图缓存长度
+       buf:Pointer;               //位图缓存
+       bmp:pbitmap;               //位图缓存位图指针
+       end;
+type pbitbuf=^bitbuf;             //位图缓存指针
 
 type word64=array[1..2]of longword;//四字类型
 type word128=array[1..4]of longword;//八字类型
@@ -595,11 +649,15 @@ var _wc:wndClass;                     //窗口注册结构
     _mscr:bitmap;                     //屏幕位图结构
     _pmscr:pbitmap;                   //屏幕位图指针
 
-var _tbegin:real;                     //窗口建立时间
+var _bufz:longword;                   //位图缓存当前位置
+    _bufcb,_bufcg,_bufcr:byte;        //位图缓存当前颜色
+
+var _tbegin:double;                   //窗口建立时间
     _winb:boolean;                    //窗口状态
     _draw:procedure;                  //绘图函数
 
 var _pe:longword;                     //画笔
+    _pew:longword=1;                  //画刷
     _br:longword;                     //画刷
 
 var _fx,_fy:longword;                 //文字输出位置
@@ -630,13 +688,13 @@ var _buflen:longword=$10000;          //缓冲区长度
 var _th:array[0.._thmax-1]of longword;//线程句柄
 var _thi:longword;                    //线程句柄号
 
-var _mswin:array[1.._mswinmax]of msg; //窗口消息
+var _mswin:array[0.._mswinmax-1]of msg;//窗口消息
     _mswini:longword=0;
     _mswinj:longword=0;
 var _msusr:array[1.._msusrmax]of msg; //用户消息
     _msusri:longword=1;
     _msi:longword=1;
-var _mscnt:array[0.._mscntmax-1]of real;//消息时间
+var _mscnt:array[0.._mscntmax-1]of double;//消息时间
     _mscnti:longword=0;
     _mscntj:longword=0;
 
@@ -648,12 +706,20 @@ var _GdiStart:TGdiStartup;
 
 // Functions Interface 函数接口
 
-function arcsin(x:real):real;
-function arccos(x:real):real;
-function max(x,y:longint):longint;
-function min(x,y:longint):longint;
-function max(x,y:real):real;
-function min(x,y:real):real;
+function sgn(x:double):longint;
+function abs(a:longint):longint;
+function abs(a:double):double;
+function abs(a,b:double):double;
+function abs(a,b,c:double):double;
+function max(a,b:longint):longint;
+function min(a,b:longint):longint;
+function max(a,b:double):double;
+function min(a,b:double):double;
+function max(a,b,c:double):double;
+function min(a,b,c:double):double;
+function arcsin(x:double):double;
+function arccos(x:double):double;
+function arctan2(x,y:double):double;
 
 function i2s(i:longint):ansistring;
 function i2s(i:longword):ansistring;
@@ -724,18 +790,18 @@ procedure MsgBox(s:ansistring);
 procedure Delay(t:longword);
 procedure Delay();
 procedure Sound(hz:longword;t:longword);
-procedure Sound(hz:longword;t:real);
+procedure Sound(hz:longword;t:double);
 procedure Sound(hz:longword);
 procedure FreshFPS();
 procedure AddFPS();
 function GetFPSL():longword;
-function GetFPSR():real;
+function GetFPSR():double;
 function GetFPS():longword;
 function GetError():longword;
 
 procedure CreateWin(w,h:longword;cfg,cbg:longword;style:longword);
 procedure CreateWin(w,h:longword;cfg,cbg:longword);
-procedure CreateWin(w,h:longword;cbg:longword);
+procedure CreateWin(w,h:longword;c:longword);
 procedure CreateWin(w,h:longword);
 procedure CreateWin(cbg:longword);
 procedure CreateWin();
@@ -743,11 +809,11 @@ procedure FreshWin();
 procedure CloseWin();
 function IsWin():boolean;
 procedure SetDrawProcedure(th:tprocedure);
+function GetTimeR():double;
+function GetTime():longword;
 procedure SetTitle(s:ansistring);
 procedure SetSize(w,h:longword);
 function GetTitle():ansistring;
-function GetTimeR():real;
-function GetTime():longword;
 function GetWidth():longword;
 function GetHeight():longword;
 function GetSize():longword;
@@ -758,22 +824,54 @@ function GetBorderTitle():longint;
 function GetBorderWidth():longint;
 function GetBorderHeight():longint;
 function GetBorderSize():longword;
+procedure SetPos(x,y:longword);
 function GetPosX():longint;
 function GetPosY():longint;
+function GetPos():longword;
+function GetWin():pbitmap;
+function GetScr():pbitmap;
+function GetHwnd(b:pbitmap):longword;
 function GetHwnd():longword;
+function GetDraw(b:pbitmap):longword;
 function GetDraw():longword;
+
 function GetBGColor():longword;
 procedure SetBGColor(c:longword);
 function GetFGColor():longword;
 procedure SetFGColor(c:longword);
+procedure SetPenWidth(pew:longword);
 procedure SetPenColor(b:pbitmap;c:longword);
+procedure SetPenColor(c:longword);
 procedure SetBrushColor(b:pbitmap;c:longword);
+procedure SetBrushColor(c:longword);
+function GetAlpha(c:longword):byte;
 function GetBlue(c:longword):byte;
 function GetGreen(c:longword):byte;
 function GetRed(c:longword):byte;
-function GetAlpha(c:longword):byte;
-function GetRGB(r,g,b:byte):longword;
 function GetRGBA(r,g,b,a:byte):longword;
+function GetRGB(r,g,b:byte):longword;
+procedure Byte2Long(a,b,c,d:byte;var l:longword);
+procedure Long2Byte(l:longword;var a,b,c,d:byte);
+procedure Double2Long(a,b,c,d:double;var l:longword);
+procedure Long2Double(l:longword;var a,b,c,d:double);
+procedure RGB2HSL(r,g,b:double;var h,s,l:double);
+procedure RGB2HSV(r,g,b:double;var h,s,v:double);
+procedure RGB2HSI(r,g,b:double;var h,s,i:double);
+procedure RGB2HSN(r,g,b:double;var h,s,n:double);
+procedure HSL2RGB(h,s,l:double;var r,g,b:double);
+procedure HSV2RGB(h,s,v:double;var r,g,b:double);
+procedure HSI2RGB(h,s,i:double;var r,g,b:double);
+procedure HSN2RGB(h,s,n:double;var r,g,b:double);
+function RGB2HSL(rgb:longword):longword;
+function RGB2HSV(rgb:longword):longword;
+function RGB2HSI(rgb:longword):longword;
+function RGB2HSN(rgb:longword):longword;
+function HSL2RGB(hsn:longword):longword;
+function HSV2RGB(hsn:longword):longword;
+function HSI2RGB(hsn:longword):longword;
+function HSN2RGB(hsn:longword):longword;
+procedure MixColor(rgb1,rgb2:longword;var rgb3:longword;m:double);
+procedure MixColor(rgb1,rgb2:longword;var rgb3:longword);
 
 procedure SetFont(b:pbitmap);
 procedure SetFont();
@@ -825,32 +923,35 @@ function GetPixel(x,y:longword):longword;
 procedure SetPixel(b:pbitmap;x,y:longword;c:longword);
 procedure SetPixel(x,y:longword;c:longword);
 procedure SetPixel(x,y:longword);
+function GetBBPixel(bb:pbitbuf;x,y:longword):longword;
+procedure SetBBPixel(bb:pbitbuf;x,y,c:longword);
 procedure Line(b:pbitmap;x,y,w,h:longint;c:longword);
-procedure Line(b:pbitmap;x,y,w,h:longint);
 procedure Line(x,y,w,h:longint;c:longword);
 procedure Line(x,y,w,h:longint);
 procedure Bar(b:pbitmap;x,y,w,h:longint;cfg,cbg:longword);
-procedure Bar(b:pbitmap;x,y,w,h:longint;cbg:longword);
-procedure Bar(b:pbitmap;x,y,w,h:longint);
 procedure Bar(x,y,w,h:longint;cfg,cbg:longword);
-procedure Bar(x,y,w,h:longint;cbg:longword);
+procedure Bar(x,y,w,h:longint;c:longword);
 procedure Bar(x,y,w,h:longint);
 procedure Clear(b:pbitmap;c:longword);
 procedure Clear(b:pbitmap);
 procedure Clear(c:longword);
 procedure Clear();
-procedure Arc(b:pbitmap;x,y,rx,ry:longint;sa,ea:real;cfg,cbg:longword);
-procedure Arc(x,y,rx,ry:longint;sa,ea:real;cfg,cbg:longword);
-procedure Arc(x,y,rx,ry:longint;sa,ea:real;c:longword);
-procedure Arc(x,y,rx,ry:longint;sa,ea:real);
-procedure Pie(b:pbitmap;x,y,rx,ry:longint;sa,ea:real;cfg,cbg:longword);
-procedure Pie(x,y,rx,ry:longint;sa,ea:real;cfg,cbg:longword);
-procedure Pie(x,y,rx,ry:longint;sa,ea:real;c:longword);
-procedure Pie(x,y,rx,ry:longint;sa,ea:real);
-procedure Chord(b:pbitmap;x,y,rx,ry:longint;sa,ea:real;cfg,cbg:longword);
-procedure Chord(x,y,rx,ry:longint;sa,ea:real;cfg,cbg:longword);
-procedure Chord(x,y,rx,ry:longint;sa,ea:real;c:longword);
-procedure Chord(x,y,rx,ry:longint;sa,ea:real);
+procedure Triangle(b:pbitmap;x1,y1,x2,y2,x3,y3:longint;cfg,cbg:longword);
+procedure Triangle(x1,y1,x2,y2,x3,y3:longint;cfg,cbg:longword);
+procedure Triangle(x1,y1,x2,y2,x3,y3:longint;c:longword);
+procedure Triangle(x1,y1,x2,y2,x3,y3:longint);
+procedure Arc(b:pbitmap;x,y,rx,ry:longint;sa,ea:double;cfg,cbg:longword);
+procedure Arc(x,y,rx,ry:longint;sa,ea:double;cfg,cbg:longword);
+procedure Arc(x,y,rx,ry:longint;sa,ea:double;c:longword);
+procedure Arc(x,y,rx,ry:longint;sa,ea:double);
+procedure Pie(b:pbitmap;x,y,rx,ry:longint;sa,ea:double;cfg,cbg:longword);
+procedure Pie(x,y,rx,ry:longint;sa,ea:double;cfg,cbg:longword);
+procedure Pie(x,y,rx,ry:longint;sa,ea:double;c:longword);
+procedure Pie(x,y,rx,ry:longint;sa,ea:double);
+procedure Chord(b:pbitmap;x,y,rx,ry:longint;sa,ea:double;cfg,cbg:longword);
+procedure Chord(x,y,rx,ry:longint;sa,ea:double;cfg,cbg:longword);
+procedure Chord(x,y,rx,ry:longint;sa,ea:double;c:longword);
+procedure Chord(x,y,rx,ry:longint;sa,ea:double);
 procedure Ellipse(b:pbitmap;x,y,rx,ry:longint;cfg,cbg:longword);
 procedure Ellipse(x,y,rx,ry:longint;cfg,cbg:longword);
 procedure Ellipse(x,y,rx,ry:longint;c:longword);
@@ -900,6 +1001,17 @@ procedure DrawBMP(xd,yd:longword;c:longword);
 procedure DrawBMP(xd,yd:longword);
 procedure DrawBMP(c:longword);
 procedure DrawBMP();
+procedure MixBMP(b1,b2:pbitmap;var b3:pbitmap);
+procedure BlurBMPBox(b:pbitmap;d:longword;n:longword);
+procedure BlurBMPBox(b:pbitmap;d:longword);
+procedure BlurBMPGau(b:pbitmap;d:double);
+function CreateBB(b:pbitmap):pbitbuf;
+procedure ReleaseBB(bb:pbitbuf);
+procedure GetBB(bb:pbitbuf);
+procedure SetBB(bb:pbitbuf);
+procedure MixBB(bb1,bb2:pbitbuf;var bb3:pbitbuf);
+procedure BlurBBBox(bb:pbitbuf;d:longword;n:longword);
+procedure BlurBBGau(bb:pbitbuf;d:double);
 
 procedure PressKey(k:byte;t:longword);
 procedure PressKey(k:byte);
@@ -1008,12 +1120,12 @@ function GdipLoadImageFromFile(constFilename:PWCHAR;var Image:longword):longint;
 function GdipGetImageWidth(Image:longword;var width:longword):longint;stdcall;external 'gdiplus.dll';
 function GdipGetImageHeight(Image:longword;var height:longword):longint;stdcall;external 'gdiplus.dll';
 function GdipCreateFromHDC(hdc:HDC;var graphics:longword):longint;stdcall;external 'gdiplus.dll';
-function GdipDrawImage(graphics:longword;image:longword;x:Single;y:Single):longint;stdcall;external 'gdiplus.dll';
+function GdipDrawImageRect(graphics:longword;image:longword;x,y,w,h:Single):longint;stdcall;external 'gdiplus.dll';
 function GdipDisposeImage(image:longword):longint;stdcall;external 'gdiplus.dll';
 function GdipDeleteGraphics(graphics:longword):longint;stdcall;external 'gdiplus.dll';
 procedure GdiplusShutdown(token:longword);stdcall;external 'gdiplus.dll';
-function GdipCreateBitmapFromGraphics(Width:longword;Height:longword;var graphics:longword;var Image:longword):longint;stdcall;external 'gdiplus.dll';
-function GdipCreateBitmapFromHBITMAP(Hbm:longword;Hpal:longword;var Bitmap:longword):longint;stdcall;external 'gdiplus.dll';
+function GdipCreateBitmapFromGraphics(Width,Height:longword;var graphics,Image:longword):longint;stdcall;external 'gdiplus.dll';
+function GdipCreateBitmapFromHBITMAP(Hbm,Hpal:longword;var Bitmap:longword):longint;stdcall;external 'gdiplus.dll';
 function GdipSaveImageToFile(Image:longword;const Filename:PWCHAR;const ClsidEncoder:TGUID;const EncoderParams:Pointer):longint;stdcall;external 'gdiplus.dll';
 
 // Internal Function 内部函数
@@ -1022,20 +1134,23 @@ function SendString(s:ansistring):longword;var c:array[0..MAXCHAR-1]of char;
 begin mciSendString(pchar(s),@c,MAXCHAR,0);SendString:=s2i(pc2as(@c));end;
 
 procedure WinCreateMain();
+var pmscr,pmain:pbitmap;
 begin
-ReleaseBMP();
+pmscr:=_pmscr;
+pmain:=_pmain;
 _dc:=GetDC(_hw);
 _mscr.Handle:=_hw;
 _mscr.DC:=_dc;
 _mscr.Width:=_w;
 _mscr.Height:=_h;
-_mscr.Color:=TRANSPARENT;
 _pmscr:=@_mscr;
 _pmain:=CreateBMP(_pmscr);
 _pmain^.Color:=Transparent;
 _main:=_pmain^;
 SetFont();
 if _draw<>nil then _draw;
+ReleaseBMP(pmscr);
+ReleaseBMP(pmain);
 end;
 
 function WndProc(hW:HWnd;uM:Uint;wP:WParam;lP:LParam):LResult;stdcall;
@@ -1137,18 +1252,39 @@ end;
 
 // Inline Function 内联函数
 
-function arcsin(x:real):real;
+function sgn(x:double):longint;
+begin sgn:=0;if(x>0)then sgn:=1;if(x<0)then sgn:=-1;end;
+function abs(a:longint):longint;
+begin abs:=a*sgn(a);end;
+function abs(a:double):double;
+begin abs:=sqrt(a*a);end;
+function abs(a,b:double):double;
+begin abs:=sqrt(a*a+b*b);end;
+function abs(a,b,c:double):double;
+begin abs:=sqrt(a*a+b*b+c*c);end;
+function max(a,b:longint):longint;
+begin if a>b then max:=a else max:=b;end;
+function min(a,b:longint):longint;
+begin if a<b then min:=a else min:=b;end;
+function max(a,b:double):double;
+begin if a>b then max:=a else max:=b;end;
+function min(a,b:double):double;
+begin if a<b then min:=a else min:=b;end;
+function max(a,b,c:double):double;
+begin max:=max(max(a,b),c);end;
+function min(a,b,c:double):double;
+begin min:=min(min(a,b),c);end;
+function arcsin(x:double):double;
 begin arcsin:=2*arctan(x/(1+sqrt(1-x*x)));end;
-function arccos(x:real):real;
+function arccos(x:double):double;
 begin arccos:=pi/2-arcsin(x);end;
-function max(x,y:longint):longint;
-begin if x>y then max:=x else max:=y;end;
-function min(x,y:longint):longint;
-begin if x<y then min:=x else min:=y;end;
-function max(x,y:real):real;
-begin if x>y then max:=x else max:=y;end;
-function min(x,y:real):real;
-begin if x<y then min:=x else min:=y;end;
+function arctan2(x,y:double):double;
+begin
+if(x=0)then arctan2:=sgn(y)*pi/2
+else if(x<0)then arctan2:=arctan(y/x)+pi
+else arctan2:=arctan(y/x);
+if arctan2<0 then arctan2:=arctan2+2*pi;
+end;
 
 // String Transform Function 字符串转换函数
 
@@ -1408,7 +1544,7 @@ begin Delay(0);end;
 
 procedure Sound(hz:longword;t:longword);
 begin if t=0 then t:=DELAYTIMEDEFAULT;if (hz<MINHZ) or (hz>MAXHZ) then Delay(t) else Windows.Beep(hz,t);end;
-procedure Sound(hz:longword;t:real);
+procedure Sound(hz:longword;t:double);
 begin Sound(hz,longword(round(t)));end;
 procedure Sound(hz:longword);
 begin Sound(hz,0);end;
@@ -1430,7 +1566,7 @@ begin
 if _mscnti>=_mscntj then GetFPSL:=_mscnti-_mscntj
 else GetFPSL:=_mscnti-_mscntj+_mscntmax;
 end;
-function GetFPSR():real;
+function GetFPSR():double;
 begin
 FreshFPS();
 if _mscnt[_mscnti]>_mscnt[_mscntj] then
@@ -1464,8 +1600,8 @@ Clear();
 end;
 procedure CreateWin(w,h:longword;cfg,cbg:longword);
 begin CreateWin(w,h,cfg,cbg,0);end;
-procedure CreateWin(w,h:longword;cbg:longword);
-begin CreateWin(w,h,0,cbg);end;
+procedure CreateWin(w,h:longword;c:longword);
+begin CreateWin(w,h,0,c);end;
 procedure CreateWin(w,h:longword);
 begin CreateWin(w,h,0);end;
 procedure CreateWin(cbg:longword);
@@ -1480,13 +1616,7 @@ function IsWin():boolean;
 begin IsWin:=_winb;end;
 procedure SetDrawProcedure(th:tprocedure);
 begin _draw:=th;end;
-procedure SetTitle(s:ansistring);
-begin SetWindowText(_hw,as2pc(s));end;
-procedure SetSize(w,h:longword);
-begin MoveWindow(_hw,GetPosX,GetPosY,w+GetBorderWidth*2,h+GetBorderHeight*2+GetBorderTitle,true);end;
-function GetTitle():ansistring;var c:array[0..MAXCHAR-1]of char;
-begin GetWindowText(_hw,@c,MAXCHAR);GetTitle:=pc2as(@c);end;
-function GetTimeR():real;var freq,count:TLARGEINTEGER;
+function GetTimeR():double;var freq,count:TLARGEINTEGER;
 begin
 QueryPerformanceFrequency(@freq);
 QueryPerformanceCounter(@count);
@@ -1494,6 +1624,12 @@ GetTimeR:=count/freq-_tbegin;
 end;
 function GetTime():longword;
 begin GetTime:=Trunc(GetTimeR*1000);end;
+procedure SetTitle(s:ansistring);
+begin SetWindowText(_hw,as2pc(s));end;
+function GetTitle():ansistring;var c:array[0..MAXCHAR-1]of char;
+begin GetWindowText(_hw,@c,MAXCHAR);GetTitle:=pc2as(@c);end;
+procedure SetSize(w,h:longword);
+begin MoveWindow(_hw,GetPosX,GetPosY,w+GetBorderWidth*2,h+GetBorderHeight*2+GetBorderTitle,true);end;
 function GetWidth():longword;
 begin GetWidth:=_w;end;
 function GetHeight():longword;
@@ -1514,14 +1650,29 @@ function GetBorderHeight():longint;
 begin GetBorderHeight:=GetSystemMetrics(SM_CYFRAME);end;
 function GetBorderSize():longword;
 begin GetBorderSize:=GetBorderWidth()*$10000+GetBorderHeight();end;
+procedure SetPos(x,y:longword);
+begin MoveWindow(_hw,x,y,GetWidth+GetBorderWidth*2,GetHeight+GetBorderHeight*2+GetBorderTitle,true);end;
 function GetPosX():longint;var rt:RECT=(Left:0;Top:0;Right:0;Bottom:0);
 begin GetWindowRect(_hw,rt);GetPosX:=rt.Left;end;
 function GetPosY():longint;var rt:RECT=(Left:0;Top:0;Right:0;Bottom:0);
 begin GetWindowRect(_hw,rt);GetPosY:=rt.Top;end;
+function GetPos():longword;
+begin GetPos:=GetPosX()*$10000+GetPosY();end;
+function GetWin():pbitmap;
+begin GetWin:=_pmain;end;
+function GetScr():pbitmap;
+begin GetScr:=_pmscr;end;
+function GetHwnd(b:pbitmap):longword;
+begin GetHwnd:=b^.handle;end;
 function GetHwnd():longword;
 begin GetHwnd:=_hw;end;
+function GetDraw(b:pbitmap):longword;
+begin GetDraw:=b^.dc;end;
 function GetDraw():longword;
 begin GetDraw:=_dc;end;
+
+// Color Function 颜色函数
+
 function GetBGColor():longword;
 begin GetBGColor:=_cbg;end;
 procedure SetBGColor(c:longword);
@@ -1530,11 +1681,13 @@ function GetFGColor():longword;
 begin GetFGColor:=_cfg;end;
 procedure SetFGColor(c:longword);
 begin _cfg:=c;end;
+procedure SetPenWidth(pew:longword);
+begin _pew:=pew;end;
 procedure SetPenColor(b:pbitmap;c:longword);
 begin
 DeleteObject(_pe);
 if c=TRANSPARENT then _pe:=GetStockObject(NULL_PEN)
-else _pe:=CreatePen(PS_SOLID,1,c);
+else _pe:=CreatePen(PS_SOLID,_pew,c);
 SelectObject(b^.dc,_pe);
 end;
 procedure SetBrushColor(b:pbitmap;c:longword);
@@ -1548,18 +1701,181 @@ procedure SetPenColor(c:longword);
 begin SetPenColor(_pmain,c);end;
 procedure SetBrushColor(c:longword);
 begin SetBrushColor(_pmain,c);end;
-function GetBlue(c:longword):byte;
-begin GetBlue:=c shr 16 and $FF;end;
-function GetGreen(c:longword):byte;
-begin GetGreen:=c shr 8 and $FF;end;
 function GetRed(c:longword):byte;
 begin GetRed:=c shr 0 and $FF;end;
+function GetGreen(c:longword):byte;
+begin GetGreen:=c shr 8 and $FF;end;
+function GetBlue(c:longword):byte;
+begin GetBlue:=c shr 16 and $FF;end;
 function GetAlpha(c:longword):byte;
 begin GetAlpha:=c shr 24 and $FF;end;
 function GetRGBA(r,g,b,a:byte):longword;
 begin GetRGBA:=a shl 24 or b shl 16 or g shl 8 or r;end;
 function GetRGB(r,g,b:byte):longword;
 begin GetRGB:=GetRGBA(r,g,b,0);end;
+procedure Byte2Long(a,b,c,d:byte;var l:longword);
+begin l:=d shl 24 or c shl 16 or b shl 8 or a;end;
+procedure Long2Byte(l:longword;var a,b,c,d:byte);
+begin a:=l shr 0 and $FF;b:=l shr 8 and $FF;c:=l shr 16 and $FF;d:=l shr 24 and $FF;end;
+procedure Double2Long(a,b,c,d:double;var l:longword);
+begin l:=trunc((min(1,max(0,d))+0.001)*$FF) shl 24 or trunc((min(1,max(0,c))+0.001)*$FF) shl 16 or
+trunc((min(1,max(0,b))+0.001)*$FF) shl 8 or trunc((min(1,max(0,a))+0.001)*$FF);end;
+procedure Long2Double(l:longword;var a,b,c,d:double);
+begin a:=(l shr 0 and $FF)/$FF;b:=(l shr 8 and $FF)/$FF;c:=(l shr 16 and $FF)/$FF;d:=(l shr 24 and $FF)/$FF;end;
+procedure RGB2HSL(r,g,b:double;var h,s,l:double);
+var c,m:double;
+begin
+m:=max(r,g,b);
+c:=max(r,g,b)-min(r,g,b);
+if c=0 then h:=0
+else if m=r then h:=(g-b)/c/6
+else if m=g then h:=(b-r)/c/6+1/3
+else if m=b then h:=(r-g)/c/6+2/3;
+if h<0 then h:=h+1;
+l:=(max(r,g,b)+min(r,g,b))/2;
+if l=1 then s:=0
+else s:=c/(1-abs(2*l-1));
+end;
+procedure RGB2HSV(r,g,b:double;var h,s,v:double);
+var c,m:double;
+begin
+m:=max(r,g,b);
+c:=max(r,g,b)-min(r,g,b);
+if c=0 then h:=0
+else if m=r then h:=(g-b)/c/6
+else if m=g then h:=(b-r)/c/6+1/3
+else if m=b then h:=(r-g)/c/6+2/3;
+if h<0 then h:=h+1;
+v:=max(r,g,b);
+if v=0 then s:=0
+else s:=c/v;
+end;
+procedure RGB2HSI(r,g,b:double;var h,s,i:double);
+var c,m:double;
+begin
+m:=max(r,g,b);
+c:=max(r,g,b)-min(r,g,b);
+if c=0 then h:=0
+else if m=r then h:=(g-b)/c/6
+else if m=g then h:=(b-r)/c/6+1/3
+else if m=b then h:=(r-g)/c/6+2/3;
+if h<0 then h:=h+1;
+i:=(r+g+b)/3;
+if i=0 then s:=0
+else s:=1-min(r,g,b)/i;
+end;
+procedure RGB2HSN(r,g,b:double;var h,s,n:double);
+var x,y:double;
+var s0,s1:double;
+begin
+n:=(r+g+b)/3;
+x:=(r-n);
+y:=(g-b)/sqrt(3);
+h:=arctan2(x,y)/2/pi;
+if n>0 then s0:=max((n-r)/(n-0),(n-g)/(n-0),(n-b)/(n-0)) else s0:=0;
+if n<1 then s1:=max((n-r)/(n-1),(n-g)/(n-1),(n-b)/(n-1)) else s1:=0;
+s:=max(s0,s1);
+end;
+procedure HSL2RGB(h,s,l:double;var r,g,b:double);
+var c,x:double;
+begin
+c:=(1-abs(2*l-1))*s;
+x:=h*6;
+while x>=2 do x:=x-2;
+x:=c*(1-abs(x-1));
+if(0/6<=h)and(h<=1/6)then begin r:=c;g:=x;b:=0;end;
+if(1/6<=h)and(h<=2/6)then begin r:=x;g:=c;b:=0;end;
+if(2/6<=h)and(h<=3/6)then begin r:=0;g:=c;b:=x;end;
+if(3/6<=h)and(h<=4/6)then begin r:=0;g:=x;b:=c;end;
+if(4/6<=h)and(h<=5/6)then begin r:=x;g:=0;b:=c;end;
+if(5/6<=h)and(h<=6/6)then begin r:=c;g:=0;b:=x;end;
+r:=r+l-c/2;
+g:=g+l-c/2;
+b:=b+l-c/2;
+end;
+procedure HSV2RGB(h,s,v:double;var r,g,b:double);
+var c,x:double;
+begin
+c:=v*s;
+x:=h*6;
+while x>=2 do x:=x-2;
+x:=c*(1-abs(x-1));
+if(0/6<=h)and(h<=1/6)then begin r:=c;g:=x;b:=0;end;
+if(1/6<=h)and(h<=2/6)then begin r:=x;g:=c;b:=0;end;
+if(2/6<=h)and(h<=3/6)then begin r:=0;g:=c;b:=x;end;
+if(3/6<=h)and(h<=4/6)then begin r:=0;g:=x;b:=c;end;
+if(4/6<=h)and(h<=5/6)then begin r:=x;g:=0;b:=c;end;
+if(5/6<=h)and(h<=6/6)then begin r:=c;g:=0;b:=x;end;
+r:=r+v-c;
+g:=g+v-c;
+b:=b+v-c;
+end;
+procedure HSI2RGB(h,s,i:double;var r,g,b:double);
+var c,x:double;
+begin
+x:=h*6;
+while x>=2 do x:=x-2;
+x:=1-abs(x-1);
+if i>0 then s:=min(s,(1/i-1)/(3/(1+x)-1));
+c:=(3*i*s)/(1+x);
+x:=c*x;
+if(0/6<=h)and(h<=1/6)then begin r:=c;g:=x;b:=0;end;
+if(1/6<=h)and(h<=2/6)then begin r:=x;g:=c;b:=0;end;
+if(2/6<=h)and(h<=3/6)then begin r:=0;g:=c;b:=x;end;
+if(3/6<=h)and(h<=4/6)then begin r:=0;g:=x;b:=c;end;
+if(4/6<=h)and(h<=5/6)then begin r:=x;g:=0;b:=c;end;
+if(5/6<=h)and(h<=6/6)then begin r:=c;g:=0;b:=x;end;
+r:=r+i*(1-s);
+g:=g+i*(1-s);
+b:=b+i*(1-s);
+end;
+procedure HSN2RGB(h,s,n:double;var r,g,b:double);
+var x,c:double;
+var ir,ig,ib:double;
+var jr,jg,jb:double;
+begin
+ir:=+cos(+0/6*2*pi);
+ig:=-cos(-1/6*2*pi);
+ib:=-cos(+1/6*2*pi);
+jr:=+sin(+0/6*2*pi);
+jg:=-sin(-1/6*2*pi);
+jb:=-sin(+1/6*2*pi);
+x:=h*6;
+while x>=2 do x:=x-2;
+x:=1-abs(x-1);
+c:=min((1-n)/cos(x/6*2*pi),n/cos((1-x)/6*2*pi));
+r:=(cos(h*2*pi)*ir+sin(h*2*pi)*jr)*c*s+n;
+g:=(cos(h*2*pi)*ig+sin(h*2*pi)*jg)*c*s+n;
+b:=(cos(h*2*pi)*ib+sin(h*2*pi)*jb)*c*s+n;
+end;
+function RGB2HSL(rgb:longword):longword;var r,g,b,h,s,n,a:double;
+begin Long2Double(rgb,r,g,b,a);RGB2HSL(r,g,b,h,s,n);Double2Long(h,s,n,a,RGB2HSL);end;
+function RGB2HSV(rgb:longword):longword;var r,g,b,h,s,n,a:double;
+begin Long2Double(rgb,r,g,b,a);RGB2HSV(r,g,b,h,s,n);Double2Long(h,s,n,a,RGB2HSV);end;
+function RGB2HSI(rgb:longword):longword;var r,g,b,h,s,n,a:double;
+begin Long2Double(rgb,r,g,b,a);RGB2HSI(r,g,b,h,s,n);Double2Long(h,s,n,a,RGB2HSI);end;
+function RGB2HSN(rgb:longword):longword;var r,g,b,h,s,n,a:double;
+begin Long2Double(rgb,r,g,b,a);RGB2HSN(r,g,b,h,s,n);Double2Long(h,s,n,a,RGB2HSN);end;
+function HSL2RGB(hsn:longword):longword;var r,g,b,h,s,n,a:double;
+begin Long2Double(hsn,h,s,n,a);HSL2RGB(h,s,n,r,g,b);Double2Long(r,g,b,a,HSL2RGB);end;
+function HSV2RGB(hsn:longword):longword;var r,g,b,h,s,n,a:double;
+begin Long2Double(hsn,h,s,n,a);HSV2RGB(h,s,n,r,g,b);Double2Long(r,g,b,a,HSV2RGB);end;
+function HSI2RGB(hsn:longword):longword;var r,g,b,h,s,n,a:double;
+begin Long2Double(hsn,h,s,n,a);HSI2RGB(h,s,n,r,g,b);Double2Long(r,g,b,a,HSI2RGB);end;
+function HSN2RGB(hsn:longword):longword;var r,g,b,h,s,n,a:double;
+begin Long2Double(hsn,h,s,n,a);HSN2RGB(h,s,n,r,g,b);Double2Long(r,g,b,a,HSN2RGB);end;
+procedure MixColor(rgb1,rgb2:longword;var rgb3:longword;m:double);
+var r1,g1,b1,r2,g2,b2,r3,g3,b3,a:byte;
+begin
+long2byte(rgb1,r1,g1,b1,a);
+long2byte(rgb2,r2,g2,b2,a);
+r3:=trunc(r1*m+r2*(1-m));
+g3:=trunc(g1*m+g2*(1-m));
+b3:=trunc(b1*m+b2*(1-m));
+byte2long(r3,g3,b3,0,rgb3);
+end;
+procedure MixColor(rgb1,rgb2:longword;var rgb3:longword);
+begin MixColor(rgb1,rgb2,rgb3,1/2);end;
 
 // Font and Text Function 字体文本函数
 
@@ -1716,6 +2032,18 @@ SetPenColor(b,c);
 Windows.MoveToEx(b^.dc,x,y,nil);
 Windows.LineTo(b^.dc,x+w,y+h);
 end;
+function GetBBPixel(bb:pbitbuf;x,y:longword):longword;
+begin with bb^ do begin
+_bufz:=min(bb^.len,max(0,((bb^.bmp^.width*3)+3)div 4*4*(bb^.bmp^.height-(1+y))+x*3));
+_bufcb:=pbyte(buf+_bufz)^;_bufcg:=pbyte(buf+_bufz+1)^;_bufcr:=pbyte(buf+_bufz+2)^;
+GetBBPixel:=_bufcb shl 16 or _bufcg shl 8 or _bufcr;
+end;end;
+procedure SetBBPixel(bb:pbitbuf;x,y,c:longword);
+begin with bb^do begin
+_bufz:=min(bb^.len,max(0,((bb^.bmp^.width*3)+3)div 4*4*(bb^.bmp^.height-(1+y))+x*3));
+_bufcr:=c shr 0 and $FF;_bufcg:=c shr 8 and $FF;_bufcb:=c shr 16 and $FF;
+pbyte(buf+_bufz)^:=_bufcb;pbyte(buf+_bufz+1)^:=_bufcg;pbyte(buf+_bufz+2)^:=_bufcr;
+end;end;
 procedure Line(b:pbitmap;x,y,w,h:longint);
 begin Line(b,x,y,w,h,0);end;
 procedure Line(x,y,w,h:longint;c:longword);
@@ -1734,28 +2062,45 @@ lpRect.right:=x+w;
 lpRect.bottom:=y+h;
 SetPenColor(b,cfg);
 SetBrushColor(b,cbg);
-if cfg<>Transparent then Windows.FrameRect(b^.dc,lpRect,_pe);
 if cbg<>Transparent then Windows.FillRect(b^.dc,lpRect,_br);
+if cfg<>Transparent then Windows.FrameRect(b^.dc,lpRect,_pe);
 end;
-procedure Bar(b:pbitmap;x,y,w,h:longint;cbg:longword);
-begin Bar(b,x,y,w,h,0,cbg);end;
-procedure Bar(b:pbitmap;x,y,w,h:longint);
-begin Bar(b,x,y,w,h,0);end;
 procedure Bar(x,y,w,h:longint;cfg,cbg:longword);
 begin Bar(nil,x,y,w,h,cfg,cbg);end;
-procedure Bar(x,y,w,h:longint;cbg:longword);
-begin Bar(x,y,w,h,0,cbg);end;
+procedure Bar(x,y,w,h:longint;c:longword);
+begin Bar(x,y,w,h,0,c);end;
 procedure Bar(x,y,w,h:longint);
 begin Bar(x,y,w,h,0);end;
 procedure Clear(b:pbitmap;c:longword);
-begin if b=nil then b:=_pmain;if c=0 then c:=_cbg;Bar(b,0,0,b^.Width,b^.Height,c);end;
+begin if b=nil then b:=_pmain;if c=0 then c:=_cbg;Bar(b,0,0,b^.Width,b^.Height,0,c);end;
 procedure Clear(b:pbitmap);
 begin Clear(b,0);end;
 procedure Clear(c:longword);
 begin Clear(nil,c);end;
 procedure Clear();
 begin Clear(0);end;
-procedure Arc(b:pbitmap;x,y,rx,ry:longint;sa,ea:real;cfg,cbg:longword);
+procedure Triangle(b:pbitmap;x1,y1,x2,y2,x3,y3:longint;cfg,cbg:longword);
+var tri:array[0..3]of POINT;
+begin
+if b=nil then b:=_pmain;
+if cfg=0 then cfg:=_cfg;
+if cbg=0 then cbg:=cfg;
+tri[0].x:=x1;tri[0].y:=y1;
+tri[1].x:=x2;tri[1].y:=y2;
+tri[2].x:=x3;tri[2].y:=y3;
+tri[3].x:=x1;tri[3].y:=y1;
+SetPenColor(b,cfg);
+SetBrushColor(b,cbg);
+if cbg<>Transparent then Windows.Polygon(b^.dc,@tri,4);
+if cfg<>Transparent then Windows.PolyLine(b^.dc,@tri,4);
+end;
+procedure Triangle(x1,y1,x2,y2,x3,y3:longint;cfg,cbg:longword);
+begin Triangle(nil,x1,y1,x2,y2,x3,y3,cfg,cbg);end;
+procedure Triangle(x1,y1,x2,y2,x3,y3:longint;c:longword);
+begin Triangle(x1,y1,x2,y2,x3,y3,0,c);end;
+procedure Triangle(x1,y1,x2,y2,x3,y3:longint);
+begin Triangle(x1,y1,x2,y2,x3,y3,0);end;
+procedure Arc(b:pbitmap;x,y,rx,ry:longint;sa,ea:double;cfg,cbg:longword);
 begin
 if b=nil then b:=_pmain;
 if cfg=0 then cfg:=_cfg;
@@ -1766,13 +2111,13 @@ Windows.Arc(b^.dc,x-rx,y-ry,x+rx,y+ry,
 x+round(cos(sa)*rx),y+round(sin(sa)*ry),
 x+round(cos(ea)*rx),y+round(sin(ea)*ry));
 end;
-procedure Arc(x,y,rx,ry:longint;sa,ea:real;cfg,cbg:longword);
+procedure Arc(x,y,rx,ry:longint;sa,ea:double;cfg,cbg:longword);
 begin Arc(nil,x,y,rx,ry,sa,ea,cfg,cbg);end;
-procedure Arc(x,y,rx,ry:longint;sa,ea:real;c:longword);
+procedure Arc(x,y,rx,ry:longint;sa,ea:double;c:longword);
 begin Arc(x,y,rx,ry,sa,ea,c,c);end;
-procedure Arc(x,y,rx,ry:longint;sa,ea:real);
+procedure Arc(x,y,rx,ry:longint;sa,ea:double);
 begin Arc(x,y,rx,ry,sa,ea);end;
-procedure Pie(b:pbitmap;x,y,rx,ry:longint;sa,ea:real;cfg,cbg:longword);
+procedure Pie(b:pbitmap;x,y,rx,ry:longint;sa,ea:double;cfg,cbg:longword);
 begin
 if b=nil then b:=_pmain;
 if cfg=0 then cfg:=_cfg;
@@ -1783,13 +2128,13 @@ Windows.Pie(b^.dc,x-rx,y-ry,x+rx,y+ry,
 x+round(cos(sa)*rx),y+round(sin(sa)*ry),
 x+round(cos(ea)*rx),y+round(sin(ea)*ry));
 end;
-procedure Pie(x,y,rx,ry:longint;sa,ea:real;cfg,cbg:longword);
+procedure Pie(x,y,rx,ry:longint;sa,ea:double;cfg,cbg:longword);
 begin Pie(nil,x,y,rx,ry,sa,ea,cfg,cbg);end;
-procedure Pie(x,y,rx,ry:longint;sa,ea:real;c:longword);
+procedure Pie(x,y,rx,ry:longint;sa,ea:double;c:longword);
 begin Pie(x,y,rx,ry,sa,ea,c,c);end;
-procedure Pie(x,y,rx,ry:longint;sa,ea:real);
+procedure Pie(x,y,rx,ry:longint;sa,ea:double);
 begin Pie(x,y,rx,ry,sa,ea);end;
-procedure Chord(b:pbitmap;x,y,rx,ry:longint;sa,ea:real;cfg,cbg:longword);
+procedure Chord(b:pbitmap;x,y,rx,ry:longint;sa,ea:double;cfg,cbg:longword);
 begin
 if b=nil then b:=_pmain;
 if cfg=0 then cfg:=_cfg;
@@ -1800,11 +2145,11 @@ Windows.Chord(b^.dc,x-rx,y-ry,x+rx,y+ry,
 x+round(cos(sa)*rx),y+round(sin(sa)*ry),
 x+round(cos(ea)*rx),y+round(sin(ea)*ry));
 end;
-procedure Chord(x,y,rx,ry:longint;sa,ea:real;cfg,cbg:longword);
+procedure Chord(x,y,rx,ry:longint;sa,ea:double;cfg,cbg:longword);
 begin Chord(nil,x,y,rx,ry,sa,ea,cfg,cbg);end;
-procedure Chord(x,y,rx,ry:longint;sa,ea:real;c:longword);
+procedure Chord(x,y,rx,ry:longint;sa,ea:double;c:longword);
 begin Chord(x,y,rx,ry,sa,ea,c,c);end;
-procedure Chord(x,y,rx,ry:longint;sa,ea:real);
+procedure Chord(x,y,rx,ry:longint;sa,ea:double);
 begin Chord(x,y,rx,ry,sa,ea);end;
 procedure Ellipse(b:pbitmap;x,y,rx,ry:longint;cfg,cbg:longword);
 begin
@@ -1859,9 +2204,9 @@ procedure ReleaseBMP(b:pbitmap);
 begin
 if b<>nil then
   begin
-  ReleaseDC(b^.Handle,b^.DC);
-  Deleteobject(b^.DC);
-  DeleteObject(b^.Handle);
+  if b^.dc<>_dc then ReleaseDC(b^.Handle,b^.DC);
+  if b^.dc<>_dc then Deleteobject(b^.DC);
+  if b^.Handle<>_hw then DeleteObject(b^.Handle);
   if b<>_pmscr then Freemem(b);
   end;
 end;
@@ -1879,7 +2224,7 @@ GdipGetImageWidth(_GdiImage,bw);
 GdipGetImageHeight(_GdiImage,bh);
 LoadBMP:=CreateBMP(bw,bh,c);
 GdipCreateFromHDC(LoadBMP^.dc,_GdiGraph);
-GdipDrawImage(_GdiGraph,_GdiImage,0,0);
+GdipDrawImageRect(_GdiGraph,_GdiImage,0,0,bw,bh);
 GdipDisposeImage(_GdiImage);
 GdipDeleteGraphics(_GdiGraph);
 GdiplusShutdown(_GdiToken);
@@ -1891,11 +2236,9 @@ begin
 StringToWideCHar(s,_GdiWideChar,length(s)+1);
 _GdiStart.Version:=1;
 GdiplusStartup(_GdiToken,@_GdiStart,nil);
-GdipCreateFromHDC(b^.dc,_GdiGraph);
 GdipCreateBitmapFromHBITMAP(b^.handle,0,_GdiImage);
 GdipSaveImageToFile(_GdiImage,_GdiWideChar,GDIImageFormatPNG,nil);
 GdipDisposeImage(_GdiImage);
-GdipDeleteGraphics(_GdiGraph);
 GdiplusShutdown(_GdiToken);
 end;
 procedure DrawBMP(bs,bd:pbitmap;xs,ys,ws,hs,xd,yd,wd,hd:longword;c:longword);
@@ -1987,6 +2330,226 @@ procedure DrawBMP(c:longword);
 begin DrawBMP(nil,c);end;
 procedure DrawBMP();
 begin DrawBMP(nil);end;
+procedure MixBMP(b1,b2:pbitmap;var b3:pbitmap);var bb1,bb2,bb3:pbitbuf;
+begin bb1:=CreateBB(b1);bb2:=CreateBB(b2);bb3:=CreateBB(b3);
+GetBB(bb1);GetBB(bb2);MixBB(bb1,bb2,bb3);SetBB(bb3);
+ReleaseBB(bb1);ReleaseBB(bb2);ReleaseBB(bb3);end;
+procedure BlurBMPBox(b:pbitmap;d:longword;n:longword);var bb:pbitbuf;
+begin bb:=CreateBB(b);GetBB(bb);BlurBBBox(bb,d,n);SetBB(bb);ReleaseBB(bb);end;
+procedure BlurBMPBox(b:pbitmap;d:longword);
+begin BlurBMPBox(b,d,1);end;
+procedure BlurBMPGau(b:pbitmap;d:double);var bb:pbitbuf;
+begin bb:=CreateBB(b);GetBB(bb);BlurBBGau(bb,d);SetBB(bb);ReleaseBB(bb);end;
+function CreateBB(b:pbitmap):pbitbuf;
+var bb:pbitbuf;
+begin
+bb:=AllocMem(sizeof(bitbuf));
+with bb^ do
+begin
+with bmi.bmiHeader do
+  begin
+  biSize:=sizeof(bb^.bmi.bmiHeader);
+  biWidth:=b^.width;
+  biHeight:=b^.height;
+  biPlanes:=1;
+  biBitCount:=24;
+  biCompression:=BI_RGB;
+  end;
+len:=b^.width*b^.height*4;
+buf:=AllocMem(len);
+bmp:=b;
+end;
+CreateBB:=bb;
+end;
+procedure ReleaseBB(bb:pbitbuf);
+begin FreeMem(bb^.buf);end;
+procedure GetBB(bb:pbitbuf);
+begin with bb^ do GetDIBits(bmp^.dc,bmp^.Handle,0,bmp^.height,buf,bmi,DIB_RGB_COLORS);end;
+procedure SetBB(bb:pbitbuf);
+begin with bb^ do SetDIBits(bmp^.dc,bmp^.Handle,0,bmp^.height,buf,bmi,DIB_RGB_COLORS);end;
+procedure MixBB(bb1,bb2:pbitbuf;var bb3:pbitbuf);
+var x,y,w,h:longint;
+var rgb1,rgb2,rgb3:longword;
+begin
+w:=max(bb1^.bmp^.width,bb2^.bmp^.Width);
+h:=max(bb1^.bmp^.Height,bb2^.bmp^.Height);
+for x:=0 to w-1 do
+  for y:=0 to h-1 do
+    begin
+    rgb1:=GetBBPixel(bb1,x,y);
+    rgb2:=GetBBPixel(bb2,x,y);
+    MixColor(rgb1,rgb2,rgb3);
+    SetBBPixel(bb3,x,y,rgb3);
+    end;
+end;
+procedure BlurBBBox(bb:pbitbuf;d:longword;n:longword);
+var k:longint;
+var x,y,w,h:longint;
+var rgb:array of array of longword;
+var r0,g0,b0,r1,g1,b1:array of array of byte;
+var r,g,b:longint;
+begin
+w:=bb^.bmp^.width;
+h:=bb^.bmp^.Height;
+SetLength(rgb,w,h);
+SetLength(r0,w,h);
+SetLength(g0,w,h);
+SetLength(b0,w,h);
+SetLength(r1,w,h);
+SetLength(g1,w,h);
+SetLength(b1,w,h);
+for x:=0 to w-1 do
+  for y:=0 to h-1 do
+    begin
+    rgb[x,y]:=GetBBPixel(bb,x,y);
+    r0[x,y]:=GetRed(rgb[x,y]);
+    g0[x,y]:=GetGreen(rgb[x,y]);
+    b0[x,y]:=GetBlue(rgb[x,y]);
+    end;
+for k:=1 to n do
+begin
+for x:=0 to w-1 do
+  begin
+  r:=0;for y:=-d to d do r:=r+r0[x,min(max(0,y),h-1)];
+  g:=0;for y:=-d to d do g:=g+g0[x,min(max(0,y),h-1)];
+  b:=0;for y:=-d to d do b:=b+b0[x,min(max(0,y),h-1)];
+  for y:=0 to h-1 do
+    begin
+    r1[x,y]:=round(r/(2*d+1));
+    g1[x,y]:=round(g/(2*d+1));
+    b1[x,y]:=round(b/(2*d+1));
+    r:=r-r0[x,min(max(0,y-d),h-1)]+r0[x,min(max(0,y+d+1),h-1)];
+    g:=g-g0[x,min(max(0,y-d),h-1)]+g0[x,min(max(0,y+d+1),h-1)];
+    b:=b-b0[x,min(max(0,y-d),h-1)]+b0[x,min(max(0,y+d+1),h-1)];
+    end;
+  end;
+for x:=0 to w-1 do
+  for y:=0 to h-1 do
+    begin
+    r0[x,y]:=r1[x,y];
+    g0[x,y]:=g1[x,y];
+    b0[x,y]:=b1[x,y];
+    end;
+for y:=0 to h-1 do
+  begin
+  r:=0;for x:=-d to d do r:=r+r0[min(max(0,x),w-1),y];
+  g:=0;for x:=-d to d do g:=g+g0[min(max(0,x),w-1),y];
+  b:=0;for x:=-d to d do b:=b+b0[min(max(0,x),w-1),y];
+  for x:=0 to w-1 do
+    begin
+    r1[x,y]:=round(r/(2*d+1));
+    g1[x,y]:=round(g/(2*d+1));
+    b1[x,y]:=round(b/(2*d+1));
+    r:=r-r0[min(max(0,x-d),w-1),y]+r0[min(max(0,x+d+1),w-1),y];
+    g:=g-g0[min(max(0,x-d),w-1),y]+g0[min(max(0,x+d+1),w-1),y];
+    b:=b-b0[min(max(0,x-d),w-1),y]+b0[min(max(0,x+d+1),w-1),y];
+    end;
+  end;
+for x:=0 to w-1 do
+  for y:=0 to h-1 do
+    begin
+    r0[x,y]:=r1[x,y];
+    g0[x,y]:=g1[x,y];
+    b0[x,y]:=b1[x,y];
+    end;
+end;
+for x:=0 to w-1 do
+  for y:=0 to h-1 do
+    begin
+    rgb[x,y]:=GetRGB(r0[x,y],g0[x,y],b0[x,y]);
+    SetBBPixel(bb,x,y,rgb[x,y]);
+    end;
+end;
+procedure BlurBBGau(bb:pbitbuf;d:double);
+var k,n:longint;
+var m:double;
+var ka:array of double;
+const kk:double=sqrt(2*pi);
+var x,y,w,h:longint;
+var rgb:array of array of longword;
+var r0,g0,b0,r1,g1,b1:array of array of byte;
+var r,g,b:double;
+begin
+w:=bb^.bmp^.width;
+h:=bb^.bmp^.Height;
+SetLength(rgb,w,h);
+SetLength(r0,w,h);
+SetLength(g0,w,h);
+SetLength(b0,w,h);
+SetLength(r1,w,h);
+SetLength(g1,w,h);
+SetLength(b1,w,h);
+n:=0;
+m:=1/d/sqrt(2*pi);
+while m<0.99 do
+  begin
+  n:=n+1;
+  m:=m+exp(-sqr(n/d)/2)*2/d/kk;
+  end;
+SetLength(ka,n+1);
+for k:=0 to n do
+  ka[k]:=exp(-sqr(k/d)/2);
+for x:=0 to w-1 do
+  for y:=0 to h-1 do
+    begin
+    rgb[x,y]:=GetBBPixel(bb,x,y);
+    r0[x,y]:=GetRed(rgb[x,y]);
+    g0[x,y]:=GetGreen(rgb[x,y]);
+    b0[x,y]:=GetBlue(rgb[x,y]);
+    end;
+for x:=0 to w-1 do
+  for y:=0 to h-1 do
+    begin
+    r:=0;
+    g:=0;
+    b:=0;
+    for k:=-n to n do
+      begin
+      r:=r+ka[abs(k)]*r0[x,min(max(0,y+k),h-1)];
+      g:=g+ka[abs(k)]*g0[x,min(max(0,y+k),h-1)];
+      b:=b+ka[abs(k)]*b0[x,min(max(0,y+k),h-1)];
+      end;
+    r1[x,y]:=round(r/d/kk/m);
+    g1[x,y]:=round(g/d/kk/m);
+    b1[x,y]:=round(b/d/kk/m);
+    end;
+for x:=0 to w-1 do
+  for y:=0 to h-1 do
+    begin
+    r0[x,y]:=r1[x,y];
+    g0[x,y]:=g1[x,y];
+    b0[x,y]:=b1[x,y];
+    end;
+for y:=0 to h-1 do
+  for x:=0 to w-1 do
+    begin
+    r:=0;
+    g:=0;
+    b:=0;
+    for k:=-n to n do
+      begin
+      r:=r+ka[abs(k)]*r0[min(max(0,x+k),w-1),y];
+      g:=g+ka[abs(k)]*g0[min(max(0,x+k),w-1),y];
+      b:=b+ka[abs(k)]*b0[min(max(0,x+k),w-1),y];
+      end;
+    r1[x,y]:=round(r/d/kk/m);
+    g1[x,y]:=round(g/d/kk/m);
+    b1[x,y]:=round(b/d/kk/m);
+    end;
+for x:=0 to w-1 do
+  for y:=0 to h-1 do
+    begin
+    r0[x,y]:=r1[x,y];
+    g0[x,y]:=g1[x,y];
+    b0[x,y]:=b1[x,y];
+    end;
+for x:=0 to w-1 do
+  for y:=0 to h-1 do
+    begin
+    rgb[x,y]:=GetRGB(r0[x,y],g0[x,y],b0[x,y]);
+    SetBBPixel(bb,x,y,rgb[x,y]);
+    end;
+end;
 
 // Mouse and Key Function 鼠标键盘函数
 
@@ -2037,6 +2600,7 @@ if IsNextMsg then
   begin
   _mswinj:=(_mswinj+1)mod _mswinmax;
   _ms:=_mswin[_mswinj];
+  while(_ms.message=0) do _ms:=_mswin[_mswinj];
   end;
 end
 else IsNextMsg:=true;

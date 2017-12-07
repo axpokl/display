@@ -145,6 +145,7 @@ if (beginb>0) then
   replace(sline,' or(','||(');
   replace(sline,')or ',')||');
   replace(sline,')or(',')||(');
+  replace(sline,'not(','!(');
   replace(sline,' not ','!');
   replace(sline,' not(','!(');
   replace(sline,')not ',')!');

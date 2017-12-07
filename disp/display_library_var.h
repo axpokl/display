@@ -284,6 +284,7 @@ const long _mswinmax = 0x10000;               //窗口消息数目
 const long _msusrmax = 0x10000;               //用户消息数目
 const long _mscntmax = 0x10000;               //消息时间数目
 
+/*
 long _w,_h,_x,_y;                 //窗口宽高坐标    
 unsigned long _cbg,_cfg;          //窗口背前景颜色    
 unsigned long _style;             //窗口样式
@@ -310,3 +311,4 @@ const char* _ca;                  //音频字符串
 unsigned long _fhdl;              //文件句柄    
 unsigned long _fpos;              //文件指针位置    
 unsigned long _flen;              //文件长度
+*/

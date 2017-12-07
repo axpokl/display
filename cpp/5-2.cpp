@@ -8,5 +8,5 @@ if(iskey())msgbox(i2s(getkey()));//如果是按键则输出按键号
 if(ismouse())msgbox(i2s(getmouse()));//如果按鼠标则输出鼠标号
 if(ismousewheel())msgbox(i2s(getmousewheel()));//如果鼠标滚轮则输出滚轮号
 if(isdropfile())msgbox(getdropfile());//如果是拖拽文件则输出文件名
-}while(!(!(iswin())||(iskey(27))));//直到关闭窗口或按ESC键
+}while(!( !(iswin())||(iskey(27))));//直到关闭窗口或按ESC键
 return 0;}

@@ -1,4 +1,3 @@
-{$APPTYPE GUI}//关闭控制台
 uses Display;//使用Display单元库
 const w=10;//场地宽
 const h=20;//场地高

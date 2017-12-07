@@ -8,6 +8,7 @@ rename display_library.dll disp.dll
 ::del *.ppu /q
 ::del *.o /q
 del lib*.a /q
+lib /def:disp.def /OUT:disp.lib
 type display_library_type.h >disp.h
 type display_library_var.h >>disp.h
 type display_library_fun.h >>disp.h

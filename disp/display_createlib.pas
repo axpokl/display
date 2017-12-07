@@ -1,10 +1,11 @@
 program display_createlib;
-var fin,fout,foutc:text;
+var fin,fout,foutc,foutdef:text;
 var sfun:ansistring='';
 var sp1:ansistring='';
 var sp2:ansistring='';
 var sc1:ansistring='';
 var sc2:ansistring='';
+var sc0:ansistring='';
 var ifun:longword=0;
 
 function i2s(i:longint):ansistring;
@@ -124,6 +125,7 @@ if n=1 then fun:=p1_fun;
 if n=2 then fun:=p2_fun;
 if n=3 then fun:=c1_fun;
 if n=4 then fun:=c2_fun;
+if n=0 then fun:=fname+i2s(ifun);
 end;
 
 
@@ -132,6 +134,8 @@ assign(fout,'display_library.pas');
 rewrite(fout);
 assign(foutc,'display_library_fun.h');
 rewrite(foutc);
+assign(foutdef,'disp.def');
+rewrite(foutdef);
 assign(fin,'display_fun.txt');
 reset(fin);
 writeln(fout,'library disp;');
@@ -144,6 +148,7 @@ while not(eof(fin)) do
   sp2:=fun(sfun,2)+#13#10+sp2;
   sc1:=sc1+#13#10+fun(sfun,3);
   sc2:=sc2+#13#10+fun(sfun,4);
+  sc0:=sc0+#13#10+fun(sfun,0);
   end;
 writeln(fout,sp1);
 writeln();
@@ -151,7 +156,10 @@ writeln(fout,sp2);
 writeln(fout,'end.');
 writeln(foutc,sc1);
 writeln(foutc,sc2);
+write(foutdef,'EXPORTS');
+writeln(foutdef,sc0);
 close(fin);
+close(foutdef);
 close(foutc);
 close(fout);
 end.

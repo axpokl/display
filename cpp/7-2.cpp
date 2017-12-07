@@ -117,13 +117,13 @@ if(overlay())restart();//如果重叠则重来
 
 bool rotate(char d)//旋转
 {bool rotate_r;
-r=r+1;if(r>3)r=0;rotate_r=not(overlay());//尝试旋转
+r=r+1;if(r>3)r=0;rotate_r=!(overlay());//尝试旋转
 if(!(rotate_r))r=r-1;if(r<0)r=3;//如果不能旋转则转回来
 return rotate_r;}
 
 bool move(char dx,char dy)//移动
 {bool move_r;
-x=x+dx;y=y+dy;move_r=not(overlay());//尝试移动
+x=x+dx;y=y+dy;move_r=!(overlay());//尝试移动
 if(!(move_r)){x=x-dx;y=y-dy;};//如果不能移动则移回来
 if(!(move_r)&&(dy<0))fixblock();//如果不能移动且下落则固定
 if(dy<0)downtime=gettimer();//如果下落则重置下落时间
@@ -153,5 +153,5 @@ for(i=0;i<=3;i++)for(j=0;j<=3;j++)if(bdk[k][r][j][i]>0)drawblock(i+x,j+y,k);//画
 freshwin();//刷新窗口
 }
 delay();//延迟1毫秒
-}while(!(!(iswin())||(iskey(27))));//直到关闭窗口或按ESC键
+}while(!( !(iswin())||(iskey(27))));//直到关闭窗口或按ESC键
 return 0;}
