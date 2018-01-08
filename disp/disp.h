@@ -29,12 +29,14 @@ class mystring
 public:
 	char s[256];
 	char s0[256];
+	unsigned long len;
+	mystring() { len = 0; }
 #ifdef __STDC_LIB_EXT1__
-	mystring(const char* d) { strcpy_s(s, d); }
-	mystring operator+(const char* d) { strcpy_s(s0, s); strcat_s(s0, d); return s0; }
+	mystring(const char* d) { len = strlen(d); strcpy_s(s, d); }
+	mystring operator+(const char* d) { len = len+strlen(d); strcpy_s(s0, s); strcat_s(s0, d); return s0; }
 #else
-	mystring(const char* d) { strcpy(s, d); }
-	mystring operator+(const char* d) { strcpy(s0, s); strcat(s0, d); return s0; }
+	mystring(const char* d) { len = strlen(d); strcpy(s, d); }
+	mystring operator+(const char* d) { len = len + strlen(d); strcpy(s0, s); strcat(s0, d); return s0; }
 #endif
 	operator const char*() { return s; }
 };

@@ -651,7 +651,7 @@ var _pe:longword;                     //画笔
     _pew:longword=1;                  //画刷
     _br:longword;                     //画刷
 
-var _fx,_fy:longword;                 //文字输出位置
+var _fx,_fy:longint;                  //文字输出位置
     _fw,_fh,_fwg:longword;            //字体长宽粗细
     _flt,_fud,                        //字体斜体下划线
     _fsk,_fcs:longword;               //字体删除线字符集
@@ -879,31 +879,31 @@ procedure GetStringSize(s:ansistring);
 function GetStringWidth(s:ansistring):longword;
 function GetStringHeight(s:ansistring):longword;
 
-procedure DrawTextXY(b:pbitmap;s:ansistring;x,y:longword;cfg,cbg:longword);
-procedure DrawTextXY(b:pbitmap;s:ansistring;x,y:longword;cfg:longword);
-procedure DrawTextXY(s:ansistring;x,y:longword;cfg,cbg:longword);
-procedure DrawTextXY(s:ansistring;x,y:longword;cfg:longword);
+procedure DrawTextXY(b:pbitmap;s:ansistring;x,y:longint;cfg,cbg:longword);
+procedure DrawTextXY(b:pbitmap;s:ansistring;x,y:longint;cfg:longword);
+procedure DrawTextXY(s:ansistring;x,y:longint;cfg,cbg:longword);
+procedure DrawTextXY(s:ansistring;x,y:longint;cfg:longword);
 procedure DrawTextXY(s:ansistring;x,y:longword);
 procedure DrawText(s:ansistring;cfg,cbg:longword);
 procedure DrawText(s:ansistring;cfg:longword);
 procedure DrawText(s:ansistring);
-procedure DrawTextlnXY(s:ansistring;x,y:longword;cfg,cbg:longword);
-procedure DrawTextlnXY(s:ansistring;x,y:longword;cfg:longword);
+procedure DrawTextlnXY(s:ansistring;x,y:longint;cfg,cbg:longword);
+procedure DrawTextlnXY(s:ansistring;x,y:longint;cfg:longword);
 procedure DrawTextlnXY(s:ansistring;x,y:longword);
 procedure DrawTextln(s:ansistring;cfg,cbg:longword);
 procedure DrawTextln(s:ansistring;cfg:longword);
 procedure DrawTextln(s:ansistring);
 procedure DrawTextln();
-procedure DrawTextXYw(b:pbitmap;s:ansistring;x,y:longword;cfg,cbg:longword);
-procedure DrawTextXYw(b:pbitmap;s:ansistring;x,y:longword;cfg:longword);
-procedure DrawTextXYw(s:ansistring;x,y:longword;cfg,cbg:longword);
-procedure DrawTextXYw(s:ansistring;x,y:longword;cfg:longword);
+procedure DrawTextXYw(b:pbitmap;s:ansistring;x,y:longint;cfg,cbg:longword);
+procedure DrawTextXYw(b:pbitmap;s:ansistring;x,y:longint;cfg:longword);
+procedure DrawTextXYw(s:ansistring;x,y:longint;cfg,cbg:longword);
+procedure DrawTextXYw(s:ansistring;x,y:longint;cfg:longword);
 procedure DrawTextXYw(s:ansistring;x,y:longword);
 procedure DrawTextw(s:ansistring;cfg,cbg:longword);
 procedure DrawTextw(s:ansistring;cfg:longword);
 procedure DrawTextw(s:ansistring);
-procedure DrawTextlnXYw(s:ansistring;x,y:longword;cfg,cbg:longword);
-procedure DrawTextlnXYw(s:ansistring;x,y:longword;cfg:longword);
+procedure DrawTextlnXYw(s:ansistring;x,y:longint;cfg,cbg:longword);
+procedure DrawTextlnXYw(s:ansistring;x,y:longint;cfg:longword);
 procedure DrawTextlnXYw(s:ansistring;x,y:longword);
 procedure DrawTextlnw(s:ansistring;cfg,cbg:longword);
 procedure DrawTextlnw(s:ansistring;cfg:longword);
@@ -1107,7 +1107,7 @@ function GdiTransparentBlt(hdcd:HDC;xd,yd,wd,hd:longword;hdcs:HDC;xs,ys,ws,hs:lo
 function GdiAlphaBlend(hdcd:HDC;xd,yd,wd,hd:longword;hdcs:HDC;xs,ys,ws,hs:longword;ftn:BLENDFUNCTION):longword;stdcall;external 'gdi32.dll';
 
 function GdiplusStartup(var Token:Longword;Input,Output:Pointer):longint;stdcall;external 'gdiplus.dll';
-function GdipLoadImageFromFile(constFilename:PWCHAR;var Image:longword):longint;stdcall;external 'gdiplus.dll';
+function GdipLoadImageFromFile(const Filename:PWCHAR;var Image:longword):longint;stdcall;external 'gdiplus.dll';
 function GdipGetImageWidth(Image:longword;var width:longword):longint;stdcall;external 'gdiplus.dll';
 function GdipGetImageHeight(Image:longword;var height:longword):longint;stdcall;external 'gdiplus.dll';
 function GdipCreateFromHDC(hdc:HDC;var graphics:longword):longint;stdcall;external 'gdiplus.dll';
@@ -1229,7 +1229,7 @@ AdjustWindowRect(rect,_style,false);
 _w:=right-left;
 _h:=bottom-top;
 end;
-_hw:=CreateWindow(LPTSTR(DWORD(_wca)),nil,
+_hw:=CreateWindow(_wc.lpszClassName,nil,
 _style,_x,_y,_w,_h,0,0,MainInstance,nil);
 end;
 
@@ -1923,7 +1923,7 @@ begin GetStringSize(s);if _strz.cy>0 then GetStringWidth:=round(_strz.cx*_fh/_st
 function GetStringHeight(s:ansistring):longword;
 begin GetStringSize(s);if _strz.cy>0 then GetStringHeight:=round(_strz.cy*_fh/_strz.cy) else GetStringHeight:=0;end;
 
-procedure DrawTextXY(b:pbitmap;s:ansistring;x,y:longword;cfg,cbg:longword);
+procedure DrawTextXY(b:pbitmap;s:ansistring;x,y:longint;cfg,cbg:longword);
 begin
 if b=nil then b:=_pmain;
 if s='' then s:=' ';
@@ -1940,11 +1940,11 @@ TextOut(b^.dc,x,y,as2pc(s),length(s));
 _fx:=x+GetStringWidth(s);
 _fy:=y;
 end;
-procedure DrawTextXY(b:pbitmap;s:ansistring;x,y:longword;cfg:longword);
+procedure DrawTextXY(b:pbitmap;s:ansistring;x,y:longint;cfg:longword);
 begin DrawTextXY(b,s,x,y,cfg,0);end;
-procedure DrawTextXY(s:ansistring;x,y:longword;cfg,cbg:longword);
+procedure DrawTextXY(s:ansistring;x,y:longint;cfg,cbg:longword);
 begin DrawTextXY(nil,s,x,y,cfg,cbg);end;
-procedure DrawTextXY(s:ansistring;x,y:longword;cfg:longword);
+procedure DrawTextXY(s:ansistring;x,y:longint;cfg:longword);
 begin DrawTextXY(nil,s,x,y,cfg);end;
 procedure DrawTextXY(s:ansistring;x,y:longword);
 begin DrawTextXY(s,x,y,0);end;
@@ -1954,9 +1954,9 @@ procedure DrawText(s:ansistring;cfg:longword);
 begin DrawText(s,cfg,0);end;
 procedure DrawText(s:ansistring);
 begin DrawText(s,0);end;
-procedure DrawTextlnXY(s:ansistring;x,y:longword;cfg,cbg:longword);
+procedure DrawTextlnXY(s:ansistring;x,y:longint;cfg,cbg:longword);
 begin DrawTextXY(s,x,y,cfg,cbg);_fx:=x;_fy:=y+GetStringHeight(s);end;
-procedure DrawTextlnXY(s:ansistring;x,y:longword;cfg:longword);
+procedure DrawTextlnXY(s:ansistring;x,y:longint;cfg:longword);
 begin DrawTextlnXY(s,x,y,cfg,0);end;
 procedure DrawTextlnXY(s:ansistring;x,y:longword);
 begin DrawTextlnXY(s,x,y,0);end;
@@ -1968,7 +1968,7 @@ procedure DrawTextln(s:ansistring);
 begin DrawTextln(s,0);end;
 procedure DrawTextln();
 begin DrawTextln('');end;
-procedure DrawTextXYw(b:pbitmap;s:ansistring;x,y:longword;cfg,cbg:longword);
+procedure DrawTextXYw(b:pbitmap;s:ansistring;x,y:longint;cfg,cbg:longword);
 var fi:longword;
 begin
 if b=nil then b:=_pmain;
@@ -1986,11 +1986,11 @@ begin TextOut(b^.dc,x,y,@s[fi],1);x:=x+_fw;end;
 _fx:=x;
 _fy:=y;
 end;
-procedure DrawTextXYw(b:pbitmap;s:ansistring;x,y:longword;cfg:longword);
+procedure DrawTextXYw(b:pbitmap;s:ansistring;x,y:longint;cfg:longword);
 begin DrawTextXYw(b,s,x,y,cfg,0);end;
-procedure DrawTextXYw(s:ansistring;x,y:longword;cfg,cbg:longword);
+procedure DrawTextXYw(s:ansistring;x,y:longint;cfg,cbg:longword);
 begin DrawTextXYw(nil,s,x,y,cfg,cbg);end;
-procedure DrawTextXYw(s:ansistring;x,y:longword;cfg:longword);
+procedure DrawTextXYw(s:ansistring;x,y:longint;cfg:longword);
 begin DrawTextXYw(nil,s,x,y,cfg);end;
 procedure DrawTextXYw(s:ansistring;x,y:longword);
 begin DrawTextXYw(s,x,y,0);end;
@@ -2000,9 +2000,9 @@ procedure DrawTextw(s:ansistring;cfg:longword);
 begin DrawTextw(s,cfg,0);end;
 procedure DrawTextw(s:ansistring);
 begin DrawTextw(s,0);end;
-procedure DrawTextlnXYw(s:ansistring;x,y:longword;cfg,cbg:longword);
+procedure DrawTextlnXYw(s:ansistring;x,y:longint;cfg,cbg:longword);
 begin DrawTextXYw(s,x,y,cfg,cbg);_fx:=x;_fy:=y+_fh;end;
-procedure DrawTextlnXYw(s:ansistring;x,y:longword;cfg:longword);
+procedure DrawTextlnXYw(s:ansistring;x,y:longint;cfg:longword);
 begin DrawTextlnXYw(s,x,y,cfg,0);end;
 procedure DrawTextlnXYw(s:ansistring;x,y:longword);
 begin DrawTextlnXYw(s,x,y,0);end;
