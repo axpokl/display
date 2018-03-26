@@ -644,6 +644,7 @@ var _bufz:longword;                   //位图缓存当前位置
     _bufcb,_bufcg,_bufcr:byte;        //位图缓存当前颜色
 
 var _tbegin:double;                   //窗口建立时间
+    _tfreq,_tcount:Int64;
     _winb:boolean;                    //窗口状态
     _draw:procedure;                  //绘图函数
 
@@ -778,6 +779,7 @@ procedure StopThread(thi:longword);
 function MsgBox(s,title:ansistring;i:longword):longword;
 procedure MsgBox(s,title:ansistring);
 procedure MsgBox(s:ansistring);
+procedure Delay(t:double);
 procedure Delay(t:longword);
 procedure Delay();
 procedure Sound(hz:longword;t:longword);
@@ -879,6 +881,7 @@ procedure GetStringSize(s:ansistring);
 function GetStringWidth(s:ansistring):longword;
 function GetStringHeight(s:ansistring):longword;
 
+procedure DrawTextXY(b:pbitmap;s:ansistring;x,y:longint;w,h:longword;cfg,cbg:longword);
 procedure DrawTextXY(b:pbitmap;s:ansistring;x,y:longint;cfg,cbg:longword);
 procedure DrawTextXY(b:pbitmap;s:ansistring;x,y:longint;cfg:longword);
 procedure DrawTextXY(s:ansistring;x,y:longint;cfg,cbg:longword);
@@ -1158,7 +1161,6 @@ case uM of
     if (wp and 11>0) and (IsIconic(_hw)) then
       begin
       ShowWindow(_hw,SW_SHOW);
-      ShowWindow(_hw,SW_RESTORE);
       SetForegroundWindow(_hw);
       end;
     end;
@@ -1204,7 +1206,7 @@ function WinRegister():ATOM;
 begin
 with _wc do
   begin
-  style:=0;//CS_HREDRAW or CS_VREDRAW;
+  style:=CS_HREDRAW or CS_VREDRAW;
   lpfnWndProc:=@WndProc;
   cbClsExtra:=0;
   cbWndExtra:=0;
@@ -1240,7 +1242,7 @@ if _wca=0 then
 WinCreate();
 WinCreateMain();
 _winb:=true;
-_tbegin:=GetTimeR();
+GetTimeR();_tbegin:=_tcount;
 while IsWin() do
   begin
   GetMessage(_mst,_hw,0,0);
@@ -1537,17 +1539,19 @@ begin Msgbox(s,title,0);end;
 procedure MsgBox(s:ansistring);
 begin MsgBox(s,'');end;
 
+procedure Delay(t:double);var tbegin:double;
+begin tbegin:=GetTimeR();Sleep(max(0,trunc(t*1000)-1));While(GetTimeR()-tbegin)<t do ;end;
 procedure Delay(t:longword);
-begin if t=0 then t:=DELAYTIMEDEFAULT;Sleep(t);end;
+begin Sleep(t);end;
 procedure Delay();
-begin Delay(0);end;
+begin Delay(DELAYTIMEDEFAULT);end;
 
 procedure Sound(hz:longword;t:longword);
 begin if t=0 then t:=DELAYTIMEDEFAULT;if (hz<MINHZ) or (hz>MAXHZ) then Delay(t) else Windows.Beep(hz,t);end;
 procedure Sound(hz:longword;t:double);
 begin Sound(hz,longword(round(t)));end;
 procedure Sound(hz:longword);
-begin Sound(hz,0);end;
+begin Sound(hz,DELAYTIMEDEFAULT);end;
 
 procedure FreshFPS();
 begin
@@ -1616,11 +1620,12 @@ function IsWin():boolean;
 begin IsWin:=_winb;end;
 procedure SetDrawProcedure(th:tprocedure);
 begin _draw:=th;end;
-function GetTimeR():double;var freq,count:TLARGEINTEGER;
+function GetTimeR():double;
+var tfreq,tcount:Int64;
 begin
-QueryPerformanceFrequency(@freq);
-QueryPerformanceCounter(@count);
-GetTimeR:=count/freq-_tbegin;
+if QueryPerformanceFrequency(@tfreq)=true then _tfreq:=tfreq;
+if QueryPerformanceCounter(@tcount)=true then _tcount:=tcount;
+GetTimeR:=(_tcount-_tbegin)/_tfreq;
 end;
 function GetTime():longword;
 begin GetTime:=Trunc(GetTimeR*1000);end;
@@ -1889,7 +1894,7 @@ _flt,_fud,_fsk,_fcs,
 OUT_DEFAULT_PRECIS,
 ClIP_DEFAULT_PRECIS,
 DEFAULT_QUALITY,
-FF_DONTCARE,
+DEFAULT_PITCH or FF_DONTCARE,
 as2pc(_ffn));
 SelectObject(b^.dc,_fns);
 if _fh=0 then begin GetTextMetrics(_dc,_tm);_fh:=_tm.tmHeight;end;
@@ -1923,22 +1928,36 @@ begin GetStringSize(s);if _strz.cy>0 then GetStringWidth:=round(_strz.cx*_fh/_st
 function GetStringHeight(s:ansistring):longword;
 begin GetStringSize(s);if _strz.cy>0 then GetStringHeight:=round(_strz.cy*_fh/_strz.cy) else GetStringHeight:=0;end;
 
-procedure DrawTextXY(b:pbitmap;s:ansistring;x,y:longint;cfg,cbg:longword);
+procedure InitTextXY(var b:pbitmap;var s:ansistring;var cfg,cbg:longword);
 begin
 if b=nil then b:=_pmain;
 if s='' then s:=' ';
 if cfg=0 then cfg:=White;
 SetTextColor(b^.dc,cfg);
 if cbg=0 then
-  SetBkMode(b^.dc,TRANSPARENT)
+  SetBkMode(b^.dc,Windows.TRANSPARENT)
 else
   begin
   SetBkColor(b^.dc,cbg);
-  SetBkMode(b^.dc,OPAQUE);
+  SetBkMode(b^.dc,Windows.OPAQUE);
   end;
+end;
+procedure DrawTextXY(b:pbitmap;s:ansistring;x,y:longint;w,h:longword;cfg,cbg:longword);
+var lpRect:RECT;
+begin
+InitTextXY(b,s,cfg,cbg);
+lpRect.left:=x;
+lpRect.top:=y;
+lpRect.right:=x+w;
+lpRect.bottom:=y+h;
+Windows.DrawText(b^.dc,as2pc(s),length(s),lpRect,DT_SINGLELINE or DT_CENTER or DT_VCENTER);
+_fx:=x+w;_fy:=y;
+end;
+procedure DrawTextXY(b:pbitmap;s:ansistring;x,y:longint;cfg,cbg:longword);
+begin
+InitTextXY(b,s,cfg,cbg);
 TextOut(b^.dc,x,y,as2pc(s),length(s));
-_fx:=x+GetStringWidth(s);
-_fy:=y;
+_fx:=x+GetStringWidth(s);_fy:=y;
 end;
 procedure DrawTextXY(b:pbitmap;s:ansistring;x,y:longint;cfg:longword);
 begin DrawTextXY(b,s,x,y,cfg,0);end;
@@ -1971,20 +1990,9 @@ begin DrawTextln('');end;
 procedure DrawTextXYw(b:pbitmap;s:ansistring;x,y:longint;cfg,cbg:longword);
 var fi:longword;
 begin
-if b=nil then b:=_pmain;
-if cfg=0 then cfg:=White;
-SetTextColor(b^.dc,cfg);
-if cbg=0 then
-  SetBkMode(b^.dc,Windows.TRANSPARENT)
-else
-  begin
-  SetBkColor(b^.dc,cbg);
-  SetBkMode(b^.dc,Windows.OPAQUE);
-  end;
-for fi:=1 to length(s) do
-begin TextOut(b^.dc,x,y,@s[fi],1);x:=x+_fw;end;
-_fx:=x;
-_fy:=y;
+InitTextXY(b,s,cfg,cbg);
+for fi:=1 to length(s) do begin TextOut(b^.dc,x,y,@s[fi],1);x:=x+_fw;end;
+_fx:=x;_fy:=y;
 end;
 procedure DrawTextXYw(b:pbitmap;s:ansistring;x,y:longint;cfg:longword);
 begin DrawTextXYw(b,s,x,y,cfg,0);end;
@@ -2685,9 +2693,9 @@ begin GetMouseWinX:=GetMouseAbsX-GetPosX;end;
 function GetMouseWinY():longint;
 begin GetMouseWinY:=GetMouseAbsY-GetPosY;end;
 function GetMousePosX():longint;
-begin GetMousePosX:=GetMouseWinX-GetBorderWidth;end;
+begin GetMousePosX:=GetMouseWinX;if not(_style and WS_POPUP=WS_POPUP) then GetMousePosX:=GetMousePosX-GetBorderWidth;end;
 function GetMousePosY():longint;
-begin GetMousePosY:=GetMouseWinY-GetBorderHeight-GetBorderTitle;end;
+begin GetMousePosY:=GetMouseWinY;if not(_style and WS_POPUP=WS_POPUP) then GetMousePosY:=GetMousePosY-GetBorderHeight-GetBorderTitle;end;
 
 // Audio Function 音频函数
 
