@@ -50,6 +50,7 @@ replace(s,'pointer','void*');
 replace(s,'tprocedure','void*');
 replace(s,'pchar','const char*');
 replace(s,'ansistring','const char*');
+replace(s,'unicodestring','const short int*');
 phrasetype:=s;
 end;
 
