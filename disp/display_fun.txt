@@ -311,6 +311,7 @@ function CopyFile(src,des:ansistring):boolean;
 function MoveFile(src,des:ansistring):boolean;
 function DeleteFile(s:ansistring):boolean;
 procedure OpenFile(s:ansistring);
+procedure OpenFileW(s:unicodestring);
 procedure CloseFile();
 function GetFileLen():longword;
 function GetFilePos():longword;

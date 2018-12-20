@@ -669,16 +669,17 @@ extern "C" bool CopyFile310(const char* src,const char* des);
 extern "C" bool MoveFile311(const char* src,const char* des);
 extern "C" bool DeleteFile312(const char* s);
 extern "C" void OpenFile313(const char* s);
-extern "C" void CloseFile314();
-extern "C" unsigned long GetFileLen315();
-extern "C" unsigned long GetFilePos316();
-extern "C" void SetFilePos317(unsigned long pos);
-extern "C" unsigned char GetByte318();
-extern "C" unsigned short GetWord319();
-extern "C" unsigned long GetLongword320();
-extern "C" unsigned long GetInteger321();
-extern "C" const char* GetPchar322();
-extern "C" const char* GetString323(unsigned long len);
+extern "C" void OpenFileW314(const short int* s);
+extern "C" void CloseFile315();
+extern "C" unsigned long GetFileLen316();
+extern "C" unsigned long GetFilePos317();
+extern "C" void SetFilePos318(unsigned long pos);
+extern "C" unsigned char GetByte319();
+extern "C" unsigned short GetWord320();
+extern "C" unsigned long GetLongword321();
+extern "C" unsigned long GetInteger322();
+extern "C" const char* GetPchar323();
+extern "C" const char* GetString324(unsigned long len);
 
 long sgn(double x){return sgn1(x);}
 double abs(double a,double b){return abs2(a,b);}
@@ -993,13 +994,14 @@ bool copyfile(const char* src,const char* des){return CopyFile310(src,des);}
 bool movefile(const char* src,const char* des){return MoveFile311(src,des);}
 bool deletefile(const char* s){return DeleteFile312(s);}
 void openfile(const char* s){OpenFile313(s);}
-void closefile(){CloseFile314();}
-unsigned long getfilelen(){return GetFileLen315();}
-unsigned long getfilepos(){return GetFilePos316();}
-void setfilepos(unsigned long pos){SetFilePos317(pos);}
-unsigned char getbyte(){return GetByte318();}
-unsigned short getword(){return GetWord319();}
-unsigned long getlongword(){return GetLongword320();}
-unsigned long getinteger(){return GetInteger321();}
-const char* getpchar(){return GetPchar322();}
-mystring getstring(unsigned long len){return GetString323(len);}
+void openfilew(const short int* s){OpenFileW314(s);}
+void closefile(){CloseFile315();}
+unsigned long getfilelen(){return GetFileLen316();}
+unsigned long getfilepos(){return GetFilePos317();}
+void setfilepos(unsigned long pos){SetFilePos318(pos);}
+unsigned char getbyte(){return GetByte319();}
+unsigned short getword(){return GetWord320();}
+unsigned long getlongword(){return GetLongword321();}
+unsigned long getinteger(){return GetInteger322();}
+const char* getpchar(){return GetPchar323();}
+mystring getstring(unsigned long len){return GetString324(len);}
