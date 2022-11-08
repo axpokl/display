@@ -4,6 +4,7 @@ del *.dll
 fpc display_createlib.pas -Os
 display_createlib
 fpc display_library.pas -Os
+::ppcrossx64 display_library.pas -Os
 rename display_library.dll disp.dll
 ::del *.ppu /q
 ::del *.o /q

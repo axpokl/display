@@ -41,4 +41,4 @@ public:
 	operator const char*() { return s; }
 };
 long random(long r){return ((rand()<<16)+(rand()<<1)+rand()%2)%r;}
-void randomize(){srand(time(NULL));}
+void randomize(){srand(time(NULL)+(unsigned)clock());}

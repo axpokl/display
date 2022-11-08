@@ -805,6 +805,7 @@ function GetFPSR():double;
 function GetFPS():longword;
 function GetError():longword;
 
+procedure CreateWin(w,h:longword;cfg,cbg:longword;style:longword;winclass:ansistring);
 procedure CreateWin(w,h:longword;cfg,cbg:longword;style:longword);
 procedure CreateWin(w,h:longword;cfg,cbg:longword);
 procedure CreateWin(w,h:longword;c:longword);
@@ -1080,6 +1081,7 @@ function GetMouseWinY():longint;
 function GetMousePosX():longint;
 function GetMousePosY():longint;
 
+function LoadAudio(s1,s2:ansistring):longword;
 function LoadAudio(s:ansistring):longword;
 procedure PlayAudio(id:longword;s:ansistring;b:boolean);
 procedure PlayAudio(id:longword;s:ansistring);
@@ -1620,8 +1622,9 @@ begin GetError:=Windows.GetLastError();end;
 
 // Windows and Screen Function ´°¿ÚÆÁÄ»º¯Êý
 
-procedure CreateWin(w,h:longword;cfg,cbg:longword;style:longword);
+procedure CreateWin(w,h:longword;cfg,cbg:longword;style:longword;winclass:ansistring);
 begin
+_class:=pwidechar(unicodestring(winclass));
 if w=0 then w:=GetScrWidth() div 2;
 if h=0 then h:=GetScrHeight() div 2;
 //if cfg=0 then cfg:=$FFFFFF;
@@ -1638,6 +1641,8 @@ while not IsWin() do Sleep(1);
 SetBkMode(_dc,TRANSPARENT);
 Clear();
 end;
+procedure CreateWin(w,h:longword;cfg,cbg:longword;style:longword);
+begin CreateWin(w,h,cfg,cbg,style,DEFAULTCLASS);end;
 procedure CreateWin(w,h:longword;cfg,cbg:longword);
 begin CreateWin(w,h,cfg,cbg,0);end;
 procedure CreateWin(w,h:longword;c:longword);
@@ -2769,14 +2774,16 @@ begin GetMousePosY:=GetMouseWinY;if not(_style and WS_POPUP=WS_POPUP) then GetMo
 
 // Audio Function ÒôÆµº¯Êý
 
-function LoadAudio(s:ansistring):longword;
+function LoadAudio(s1,s2:ansistring):longword;
 begin
 _cid:=_cid+1;
-SendString('open "'+s+'" alias s'+i2s(_cid));
+SendString('open "'+s1+'"'+s2+' alias s'+i2s(_cid));
 LoadAudio:=_cid;
 end;
+function LoadAudio(s:ansistring):longword;
+begin LoadAudio:=LoadAudio(s,'');end;
 procedure PlayAudio(id:longword;s:ansistring;b:boolean);
-begin if b then SendString('play s'+i2s(id)+s+' repeat') else SendString('play s'+i2s(id)+s);end;
+begin if b then SendString('play s'+i2s(id)+s+' wait repeat') else SendString('play s'+i2s(id)+s);end;
 procedure PlayAudio(id:longword;s:ansistring);
 begin PlayAudio(id,s,false);end;
 procedure PlayAudio(id:longword;b:boolean);
