@@ -611,9 +611,9 @@ const _bdn:array[0..2] of longword=(WM_LBUTTONDOWN,WM_MBUTTONDOWN,WM_RBUTTONDOWN
 const _bup:array[0..2] of longword=(WM_LBUTTONUP,WM_MBUTTONUP,WM_RBUTTONUP);
 const _bufmax=$100000;                //文件缓冲区大小
 const _thmax=$100;                    //最大线程数量
-const _mswinmax=$10000;               //窗口消息数目
-const _msusrmax=$10000;               //用户消息数目
-const _mscntmax=$10000;               //消息时间数目
+const _mswinmax=$1000;               //窗口消息数目
+const _msusrmax=$1000;               //用户消息数目
+const _mscntmax=$1000;               //消息时间数目
 const GDIImageFormatBMP:TGUID='{557CF400-1A04-11D3-9A73-0000F81EF32E}';
       GDIImageFormatJPG:TGUID='{557CF401-1A04-11D3-9A73-0000F81EF32E}';
       GDIImageFormatGIF:TGUID='{557CF402-1A04-11D3-9A73-0000F81EF32E}';
@@ -899,6 +899,7 @@ procedure GetStringSize(s:ansistring);
 function GetStringWidth(s:ansistring):longword;
 function GetStringHeight(s:ansistring):longword;
 
+procedure DrawTextXY(b:pbitmap;s:unicodestring;x,y:longint;w,h:longword;cfg,cbg:longword);
 procedure DrawTextXY(b:pbitmap;s:ansistring;x,y:longint;w,h:longword;cfg,cbg:longword);
 procedure DrawTextXY(b:pbitmap;s:ansistring;x,y:longint;cfg,cbg:longword);
 procedure DrawTextXY(b:pbitmap;s:ansistring;x,y:longint;cfg:longword);
@@ -1977,6 +1978,21 @@ begin GetStringSize(s);if _strz.cy>0 then GetStringWidth:=round(_strz.cx*_fh/_st
 function GetStringHeight(s:ansistring):longword;
 begin GetStringSize(s);if _strz.cy>0 then GetStringHeight:=round(_strz.cy*_fh/_strz.cy) else GetStringHeight:=0;end;
 
+
+procedure InitTextXY(var b:pbitmap;var s:unicodestring;var cfg,cbg:longword);
+begin
+if b=nil then b:=_pmain;
+if s='' then s:=' ';
+if cfg=0 then cfg:=White;
+SetTextColor(b^.dc,cfg);
+if cbg=0 then
+  SetBkMode(b^.dc,Windows.TRANSPARENT)
+else
+  begin
+  SetBkColor(b^.dc,cbg);
+  SetBkMode(b^.dc,Windows.OPAQUE);
+  end;
+end;
 procedure InitTextXY(var b:pbitmap;var s:ansistring;var cfg,cbg:longword);
 begin
 if b=nil then b:=_pmain;
@@ -1990,6 +2006,17 @@ else
   SetBkColor(b^.dc,cbg);
   SetBkMode(b^.dc,Windows.OPAQUE);
   end;
+end;
+procedure DrawTextXY(b:pbitmap;s:unicodestring;x,y:longint;w,h:longword;cfg,cbg:longword);
+var lpRect:RECT;
+begin
+InitTextXY(b,s,cfg,cbg);
+lpRect.left:=x;
+lpRect.top:=y;
+lpRect.right:=x+w;
+lpRect.bottom:=y+h;
+Windows.DrawTextW(b^.dc,PWideChar(s),length(s),lpRect,DT_SINGLELINE or DT_CENTER or DT_VCENTER);
+_fx:=x+w;_fy:=y;
 end;
 procedure DrawTextXY(b:pbitmap;s:ansistring;x,y:longint;w,h:longword;cfg,cbg:longword);
 var lpRect:RECT;

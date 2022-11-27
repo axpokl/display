@@ -115,6 +115,7 @@ procedure SetFontName(s:ansistring);
 procedure GetStringSize(s:ansistring);
 function GetStringWidth(s:ansistring):longword;
 function GetStringHeight(s:ansistring):longword;
+procedure DrawTextXY(b:pbitmap;s:unicodestring;x,y:longint;w,h:longword;cfg,cbg:longword);
 procedure DrawTextXY(b:pbitmap;s:ansistring;x,y:longint;w,h:longword;cfg,cbg:longword);
 procedure DrawTextXY(b:pbitmap;s:ansistring;x,y:longint;cfg,cbg:longword);
 procedure DrawTextXY(b:pbitmap;s:ansistring;x,y:longint;cfg:longword);
